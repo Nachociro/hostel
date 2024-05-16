@@ -1,5 +1,6 @@
 package modelo;
 
+<<<<<<< Updated upstream
 
 public class Cliente {
 	String nombre;
@@ -7,6 +8,15 @@ public class Cliente {
 	int dni;
 	int numerodeTelefono;
 	String reseña = "";
+=======
+public class Cliente {
+	private String nombre;
+	private String apellido;
+	private int dni;
+	private int numerodeTelefono;
+	private String reseña = "";
+	
+>>>>>>> Stashed changes
 	public Cliente(String nombre, String apellido, int dni, int numerodeTelefono, String reseña) {
 		super();
 		this.nombre = nombre;
@@ -17,7 +27,11 @@ public class Cliente {
 	}
 	public String getNombre() {
 		return nombre;
+<<<<<<< Updated upstream
 	}
+=======
+	} 
+>>>>>>> Stashed changes
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
