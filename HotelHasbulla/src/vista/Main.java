@@ -1,9 +1,15 @@
 package vista;
 import javax.swing.JOptionPane;
-
+import controlador.UsuarioControlador;
 public class Main {
 
     public static void main(String[] args) {
+    	
+    	UsuarioControlador controlador = new UsuarioControlador();
+    	
+    	
+    	
+    	
         int opcion = 0;
         String[] roles = {"Recepcionista", "Personal de Limpieza", "Administrador"};
 
