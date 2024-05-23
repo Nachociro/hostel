@@ -1,68 +1,73 @@
 package modelo;
 
-<<<<<<< Updated upstream
+public class Cliente {
+    private int id_huesped;
+    private String nombre_huesped;
+    private String apellido;
+    private String correo;
+    private String telefono;
+    private String resena;
 
-public class Cliente {
-	String nombre;
-	String apellido;
-	int dni;
-	int numerodeTelefono;
-	String reseña = "";
-=======
-public class Cliente {
-	private String nombre;
-	private String apellido;
-	private int dni;
-	private int numerodeTelefono;
-	private String reseña = "";
-	
->>>>>>> Stashed changes
-	public Cliente(String nombre, String apellido, int dni, int numerodeTelefono, String reseña) {
-		super();
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.dni = dni;
-		this.numerodeTelefono = numerodeTelefono;
-		this.reseña = reseña;
-	}
-	public String getNombre() {
-		return nombre;
-<<<<<<< Updated upstream
-	}
-=======
-	} 
->>>>>>> Stashed changes
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	public String getApellido() {
-		return apellido;
-	}
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-	public int getDni() {
-		return dni;
-	}
-	public void setDni(int dni) {
-		this.dni = dni;
-	}
-	public int getNumerodeTelefono() {
-		return numerodeTelefono;
-	}
-	public void setNumerodeTelefono(int numerodeTelefono) {
-		this.numerodeTelefono = numerodeTelefono;
-	}
-	public String getReseña() {
-		return reseña;
-	}
-	public void setReseña(String reseña) {
-		this.reseña = reseña;
-	}
-	@Override
-	public String toString() {
-		return "Cliente [nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni + ", numerodeTelefono="
-				+ numerodeTelefono + ", reseña=" + reseña + "]";
-	}
-	
+    public Cliente(int id_huesped, String nombre_huesped, String apellido, String correo, String telefono, String resena) {
+        this.id_huesped = id_huesped;
+        this.nombre_huesped = nombre_huesped;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.resena = resena;
+    }
+
+    public int getId_huesped() {
+        return id_huesped;
+    }
+
+    public void setId_huesped(int id_huesped) {
+        this.id_huesped = id_huesped;
+    }
+
+    public String getNombre_huesped() {
+        return nombre_huesped;
+    }
+
+    public void setNombre_huesped(String nombre_huesped) {
+        this.nombre_huesped = nombre_huesped;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getResena() {
+        return resena;
+    }
+
+    public void setResena(String resena) {
+        this.resena = resena;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente [id_huesped=" + id_huesped + ", nombre_huesped=" + nombre_huesped + ", apellido=" + apellido
+                + ", correo=" + correo + ", telefono=" + telefono + ", resena=" + resena + "]";
+    }
 }
