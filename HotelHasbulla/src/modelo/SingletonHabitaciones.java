@@ -36,10 +36,7 @@ public class SingletonHabitaciones {
         }
         return null;
     }
-    public mostrarHabitacionesDisponibles() {
-    	
-    }
-    
+   
     public boolean reservarHabitacion(int numero_habitacion, Cliente cliente, Date fechaEntrada, Date fechaSalida) {
         Habitacion habitacion = buscarHabitacion(numero_habitacion);
         if (habitacion != null && habitacion.isDisponibilidad() && !habitacion.isLimpieza()) {
