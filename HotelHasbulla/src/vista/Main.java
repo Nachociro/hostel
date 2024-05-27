@@ -1,6 +1,7 @@
 package vista;
 import javax.swing.JOptionPane;
 import controlador.UsuarioControlador;
+import modelo.SingletonHabitaciones;
 public class Main {
 
     public static void main(String[] args) {
@@ -21,6 +22,7 @@ public class Main {
                 switch (opcion) {
                     case 1:
                         JOptionPane.showMessageDialog(null, "Reservando habitación"); // hacer reserva
+                  SingletonHabitaciones.reservarHabitacion();
                         break;
                     case 2:
                         JOptionPane.showMessageDialog(null, "Gestionar habitacion"); // check in y check out

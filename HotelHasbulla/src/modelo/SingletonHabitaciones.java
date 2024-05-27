@@ -34,33 +34,30 @@ public class SingletonHabitaciones {
                 return habitacion;
             }
         }
-        return null; // 
+        return null;
     }
-  
-    public boolean reservarHabitacion(int numero_habitacion, Cliente cliente, Date fechaEntrada, Date fechaSalida) {
+    public mostrarHabitacionesDisponibles() {
     	
-    	Habitacion habitacion = buscarHabitacion(numero_habitacion);
+    }
+    
+    public boolean reservarHabitacion(int numero_habitacion, Cliente cliente, Date fechaEntrada, Date fechaSalida) {
+        Habitacion habitacion = buscarHabitacion(numero_habitacion);
         if (habitacion != null && habitacion.isDisponibilidad() && !habitacion.isLimpieza()) {
             habitacion.setDisponibilidad(false);
             Reserva nuevaReserva = new Reserva(
-                generarIdReserva(),
+                Reserva.generarIdReserva(),
                 fechaEntrada,
                 fechaSalida,
                 cliente.getId_huesped(),
-                numero_habitacion
+                numero_habitacion,
+                cliente.getNombre_huesped()
             );
-           
-            JOptionPane.showMessageDialog(null, "Habitación " + numero_habitacion + " reservada con éxito para el cliente " + cliente.getNombre_huesped() + ".");
+            Reserva.agregarReserva(nuevaReserva);
+            JOptionPane.showMessageDialog(null, "Habitación " + numero_habitacion + " reservada a nombre de " + cliente.getNombre_huesped() + " \n para la fecha de " +  fechaEntrada + "\n hasta la fecha de " + fechaSalida);
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "La habitación " + numero_habitacion + " no está disponible para reservar.");
             return false;
         }
-    }
-
-    private int generarIdReserva() {
-        
-		
-        return ++idReserva;
     }
 }

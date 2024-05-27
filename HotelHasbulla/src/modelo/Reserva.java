@@ -1,20 +1,43 @@
 package modelo;
 
 import java.util.Date;
+import java.util.LinkedList;
 
 public class Reserva {
+    private static LinkedList<Reserva> reservas = new LinkedList<>();
+    private static int idReserva = 0;
+
     private int id_reserva;
     private Date fecha_entrada;
     private Date fecha_salida;
     private int id_huesped;
     private int numero_habitacion;
+    private String nombreHuesped;
 
-    public Reserva(int id_reserva, Date fecha_entrada, Date fecha_salida, int id_huesped, int numero_habitacion) {
+    public Reserva(int id_reserva, Date fecha_entrada, Date fecha_salida, int id_huesped, int numero_habitacion, String nombreHuesped) {
         this.id_reserva = id_reserva;
         this.fecha_entrada = fecha_entrada;
         this.fecha_salida = fecha_salida;
         this.id_huesped = id_huesped;
         this.numero_habitacion = numero_habitacion;
+        this.nombreHuesped = nombreHuesped;
+    }
+
+    public static int generarIdReserva() {
+        return ++idReserva;
+    }
+
+    public static void agregarReserva(Reserva reserva) {
+        reservas.add(reserva);
+    }
+
+    public static Reserva buscarReservaPorNombre(String nombreHuesped) {
+        for (Reserva reserva : reservas) {
+            if (reserva.getNombreHuesped().equalsIgnoreCase(nombreHuesped)) {
+                return reserva;
+            }
+        }
+        return null;
     }
 
     public int getId_reserva() {
@@ -57,9 +80,17 @@ public class Reserva {
         this.numero_habitacion = numero_habitacion;
     }
 
+    public String getNombreHuesped() {
+        return nombreHuesped;
+    }
+
+    public void setNombreHuesped(String nombreHuesped) {
+        this.nombreHuesped = nombreHuesped;
+    }
+
     @Override
     public String toString() {
         return "Reserva [id_reserva=" + id_reserva + ", fecha_entrada=" + fecha_entrada + ", fecha_salida=" + fecha_salida
-                + ", id_huesped=" + id_huesped + ", numero_habitacion=" + numero_habitacion + "]";
+                + ", id_huesped=" + id_huesped + ", numero_habitacion=" + numero_habitacion + ", nombreHuesped=" + nombreHuesped + "]";
     }
 }
