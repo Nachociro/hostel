@@ -1,6 +1,9 @@
 package usuario;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
+
+import javax.swing.JOptionPane;
 
 class LimpiezaHabitacion {
     int idLimpieza;
@@ -14,6 +17,31 @@ class LimpiezaHabitacion {
         this.fecha = fecha;
         this.hora = hora;
     }
+        public boolean validarFechaYHora() {
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            return fecha.isAfter(fechaActual) || (fecha.isEqual(fechaActual) && LocalTime.parse(hora).isAfter(horaActual));
+        }
+
+        public String tipoLimpieza() {
+            if (habitacionTieneReservaActiva()) {
+                return "Limpieza de Rutina";
+            } else {
+                return "Limpieza Definitiva";
+            }
+        }
+
+        public void duracionLimpieza() {
+            if (tipoLimpieza().equals("Limpieza de Rutina")) {
+            	JOptionPane.showInputDialog("La limpieza durara 5 minutos", fecha);
+            } else {
+            	JOptionPane.showInputDialog("La limpieza durara 15 minutos", fecha);
+            }
+        }
+
+        private boolean habitacionTieneReservaActiva() {
+            return false;
+        }
 
         public int getIdLimpieza() {
         return idLimpieza;
