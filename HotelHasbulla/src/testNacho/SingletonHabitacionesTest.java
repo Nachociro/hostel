@@ -3,7 +3,6 @@ package testNacho;
 import modelo.SingletonHabitaciones;
 import modelo.Habitacion;
 import modelo.Cliente;
-import modelo.Reserva;
 import java.sql.Date;
 import javax.swing.JOptionPane;
 
@@ -11,10 +10,6 @@ public class SingletonHabitacionesTest {
     public static void main(String[] args) {
         // Crear una instancia del Singleton
         SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
-
-        // Crear una habitación y agregarla al Singleton
-        Habitacion habitacion1 = new Habitacion(101, "Deluxe", "Habitación con vista al mar", 200.00, true, false);
-        singleton.agregarHabitacion(habitacion1);
 
         // Crear un cliente
         Cliente cliente1 = new Cliente(1, "Juan", "Perez", "juan.perez@example.com", "123456789", "Ninguna");

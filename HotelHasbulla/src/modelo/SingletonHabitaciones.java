@@ -1,16 +1,18 @@
 package modelo;
 
 import java.sql.Date;
-import java.util.LinkedList;
-
 import javax.swing.JOptionPane;
+import controlador.HabitacionControlador;
+import controlador.ReservaControlador;
 
 public class SingletonHabitaciones {
     private static SingletonHabitaciones instance;
-    private LinkedList<Habitacion> habitaciones;
+    private HabitacionControlador habitacionControlador;
+    private ReservaControlador reservaControlador;
 
     private SingletonHabitaciones() {
-        habitaciones = new LinkedList<>();
+        habitacionControlador = new HabitacionControlador();
+        reservaControlador = new ReservaControlador();
     }
 
     public static SingletonHabitaciones getInstance() {
@@ -20,27 +22,12 @@ public class SingletonHabitaciones {
         return instance;
     }
 
-    public void agregarHabitacion(Habitacion habitacion) {
-        habitaciones.add(habitacion);
-    }
-
-    public LinkedList<Habitacion> getHabitaciones() {
-        return habitaciones;
-    }
-
-    public Habitacion buscarHabitacion(int numero_habitacion) {
-        for (Habitacion habitacion : habitaciones) {
-            if (habitacion.getNumero_habitacion() == numero_habitacion) {
-                return habitacion;
-            }
-        }
-        return null;
-    }
-   
     public boolean reservarHabitacion(int numero_habitacion, Cliente cliente, Date fechaEntrada, Date fechaSalida) {
-        Habitacion habitacion = buscarHabitacion(numero_habitacion);
+        Habitacion habitacion = habitacionControlador.getHabitacionByNumero(numero_habitacion);
         if (habitacion != null && habitacion.isDisponibilidad() && !habitacion.isLimpieza()) {
             habitacion.setDisponibilidad(false);
+            habitacionControlador.updateHabitacion(habitacion);
+
             Reserva nuevaReserva = new Reserva(
                 Reserva.generarIdReserva(),
                 fechaEntrada,
@@ -49,8 +36,9 @@ public class SingletonHabitaciones {
                 numero_habitacion,
                 cliente.getNombre_huesped()
             );
-            Reserva.agregarReserva(nuevaReserva);
-            JOptionPane.showMessageDialog(null, "Habitación " + numero_habitacion + " reservada a nombre de " + cliente.getNombre_huesped() + " \n para la fecha de " +  fechaEntrada + "\n hasta la fecha de " + fechaSalida);
+            reservaControlador.addReserva(nuevaReserva);
+
+            JOptionPane.showMessageDialog(null, "Habitación " + numero_habitacion + " reservada a nombre de " + cliente.getNombre_huesped() + " \n para la fecha de " + fechaEntrada + "\n hasta la fecha de " + fechaSalida);
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "La habitación " + numero_habitacion + " no está disponible para reservar.");
