@@ -4,15 +4,15 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.LinkedList;
 
-public class Reserva_Tenis {
+public class ReservaTenis {
 	private int id_reserva_Tenis;
 	private LinkedList<Habitacion> id_huesped;
-	private LinkedList<Cancha_Tenis> id_Tenis;
+	private LinkedList<CanchaTenis> id_Tenis;
 	private Time horaInicio;
     private Time horaFin;
     private Date fecha;
 	
-    public Reserva_Tenis(int id_reserva_Tenis, LinkedList<Habitacion> id_huesped, LinkedList<Cancha_Tenis> id_Tenis, Time horaInicio, Time horaFin, Date fecha) {
+    public ReservaTenis(int id_reserva_Tenis, LinkedList<Habitacion> id_huesped, LinkedList<CanchaTenis> id_Tenis, Time horaInicio, Time horaFin, Date fecha) {
 		this.id_reserva_Tenis = id_reserva_Tenis;
 		this.id_huesped = id_huesped;
 		this.id_Tenis = id_Tenis;
@@ -32,10 +32,10 @@ public class Reserva_Tenis {
 	public void setId_huesped(LinkedList<Habitacion> id_huesped) {
 		this.id_huesped = id_huesped;
 	}
-	public LinkedList<Cancha_Tenis> getId_Tenis() {
+	public LinkedList<CanchaTenis> getId_Tenis() {
 		return id_Tenis;
 	}
-	public void setId_Tenis(LinkedList<Cancha_Tenis> id_Tenis) {
+	public void setId_Tenis(LinkedList<CanchaTenis> id_Tenis) {
 		this.id_Tenis = id_Tenis;
 	}
 	public Time getHoraInicio() {

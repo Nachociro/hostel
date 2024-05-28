@@ -2,30 +2,30 @@ package modelo;
 
 import javax.swing.JOptionPane;
 
-public class Cancha_Futbol {
-		private int id_futbol;
-		private int tamano;
+public class CanchaTenis {
+		private int id_Tenis;
+		private String piso;
 		private double precio;
 		private boolean disponible;
 		
-		public Cancha_Futbol(int id_futbol, int tamano, double precio, boolean disponible) {
-			this.id_futbol = id_futbol;
-			this.tamano = tamano;
+		public CanchaTenis(int id_Tenis, String piso, double precio, boolean disponible) {
+			this.id_Tenis = id_Tenis;
+			this.piso = piso;
 			this.precio = precio;
 			this.disponible = disponible;
 		}
 		
-		public int getId_futbol() {
-			return id_futbol;
+		public int getId_Tenis() {
+			return id_Tenis;
 		}
-		public void setId_futbol(int id_futbol) {
-			this.id_futbol = id_futbol;
+		public void setId_Tenis(int id_Tenis) {
+			this.id_Tenis = id_Tenis;
 		}
-		public int getTamano() {
-			return tamano;
+		public String getpiso() {
+			return piso;
 		}
-		public void setTamano(int tamano) {
-			this.tamano = tamano;
+		public void setpiso(String piso) {
+			this.piso = piso;
 		}
 		public double getPrecio() {
 			return precio;
@@ -41,24 +41,24 @@ public class Cancha_Futbol {
 		}
 		@Override
 		public String toString() {
-			return "CanchaFutbol [id_futbol=" + id_futbol + ", tamano=" + tamano + ", precio=" + precio + ", disponible=" + disponible + "]";
+			return "CanchaTenis [id_Tenis=" + id_Tenis + ", piso=" + piso + ", precio=" + precio + ", disponible=" + disponible + "]";
 		}
 		
 		public void reservarCancha() {
 			if (disponible) {
 				disponible = false;
-				System.out.println("Cancha " + this.id_futbol + "reservada con éxito.");
+				System.out.println("Cancha " + this.id_Tenis + "reservada con éxito.");
 			} else {
-				System.out.println("Cancha " + this.id_futbol + " no está disponible para reservar.");
+				System.out.println("Cancha " + this.id_Tenis + " no está disponible para reservar.");
 			}
 		}
-	    public static void reservarCancha(Cancha_Futbol[] canchas) {
+	    public static void reservarCancha(CanchaTenis[] canchas) {
 	        String canchaNum = JOptionPane.showInputDialog("Ingrese el número de la cancha a reservar:");
 	        int num = Integer.parseInt(canchaNum);
 	        boolean canchaEncontrada = false;
 
-	        for (Cancha_Futbol cancha : canchas) {
-	            if (cancha.getId_futbol() == num) {
+	        for (CanchaTenis cancha : canchas) {
+	            if (cancha.getId_Tenis() == num) {
 	                cancha.reservarCancha();
 	                canchaEncontrada = true;
 	                break;
