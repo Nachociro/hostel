@@ -12,7 +12,7 @@ public class Reserva {
     private Date fecha_salida;
     private int id_huesped;
     private int numero_habitacion;
-    private String nombreHuesped;
+    
 
     public Reserva(int id_reserva, Date fecha_entrada, Date fecha_salida, int id_huesped, int numero_habitacion, String nombreHuesped) {
         this.id_reserva = id_reserva;
@@ -20,7 +20,7 @@ public class Reserva {
         this.fecha_salida = fecha_salida;
         this.id_huesped = id_huesped;
         this.numero_habitacion = numero_habitacion;
-        this.nombreHuesped = nombreHuesped;
+       
     }
 
     public static int generarIdReserva() {
@@ -31,9 +31,9 @@ public class Reserva {
         reservas.add(reserva);
     }
 
-    public static Reserva buscarReservaPorNombre(String nombreHuesped) {
+    public static Reserva buscarReservaPorDNI(int dniHuesped) {
         for (Reserva reserva : reservas) {
-            if (reserva.getNombreHuesped().equalsIgnoreCase(nombreHuesped)) {
+            if (reserva.getId_huesped() == (dniHuesped)) {
                 return reserva;
             }
         }
@@ -80,17 +80,11 @@ public class Reserva {
         this.numero_habitacion = numero_habitacion;
     }
 
-    public String getNombreHuesped() {
-        return nombreHuesped;
-    }
-
-    public void setNombreHuesped(String nombreHuesped) {
-        this.nombreHuesped = nombreHuesped;
-    }
+  
 
     @Override
     public String toString() {
         return "Reserva [id_reserva=" + id_reserva + ", fecha_entrada=" + fecha_entrada + ", fecha_salida=" + fecha_salida
-                + ", id_huesped=" + id_huesped + ", numero_habitacion=" + numero_habitacion + ", nombreHuesped=" + nombreHuesped + "]";
+                + ", id_huesped=" + id_huesped + ", numero_habitacion=" + numero_habitacion + "]";
     }
 }

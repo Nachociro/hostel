@@ -1,5 +1,7 @@
 package controlador;
 
+import modelo.Reserva;
+import interfaces.ReservaRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,15 +10,14 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.Reserva;
-
-public class ReservaControlador {
+public class ReservaControlador implements ReservaRepository {
     private final Connection connection;
 
     public ReservaControlador() {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
+    @Override
     public void addReserva(Reserva reserva) {
         try {
             PreparedStatement statement = connection.prepareStatement(
@@ -37,6 +38,7 @@ public class ReservaControlador {
         }
     }
 
+    @Override
     public List<Reserva> getAllReservas() {
         List<Reserva> reservas = new ArrayList<>();
         try {
@@ -60,6 +62,7 @@ public class ReservaControlador {
         return reservas;
     }
 
+    @Override
     public Reserva getReservaById(int id) {
         Reserva reserva = null;
         try {
@@ -83,6 +86,7 @@ public class ReservaControlador {
         return reserva;
     }
 
+    @Override
     public void updateReserva(Reserva reserva) {
         try {
             PreparedStatement statement = connection.prepareStatement(
@@ -104,6 +108,7 @@ public class ReservaControlador {
         }
     }
 
+    @Override
     public void deleteReserva(int id) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM reservas WHERE id_reserva = ?");
@@ -117,4 +122,14 @@ public class ReservaControlador {
             e.printStackTrace();
         }
     }
+    public Reserva buscarReservaPorDNI(int dni) {
+        List<Reserva> reservas = getAllReservas();
+        for (Reserva reserva : reservas) {
+            if (reserva.getId_huesped() == dni) {
+                return reserva; 
+            }
+        }
+        return null; 
+    }
+
 }
