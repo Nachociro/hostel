@@ -1,21 +1,24 @@
 package controlador;
 
+import modelo.Habitacion;
+import modelo.Reserva;
+import interfaces.HabitacionRepository;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.Habitacion;
-
-public class HabitacionControlador {
+public class HabitacionControlador implements HabitacionRepository {
     private final Connection connection;
 
     public HabitacionControlador() {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
+    @Override
     public void addHabitacion(Habitacion habitacion) {
         try {
             PreparedStatement statement = connection.prepareStatement(
@@ -37,6 +40,7 @@ public class HabitacionControlador {
         }
     }
 
+    @Override
     public List<Habitacion> getAllHabitaciones() {
         List<Habitacion> habitaciones = new ArrayList<>();
         try {
@@ -60,6 +64,7 @@ public class HabitacionControlador {
         return habitaciones;
     }
 
+    @Override
     public Habitacion getHabitacionByNumero(int numero_habitacion) {
         Habitacion habitacion = null;
         try {
@@ -83,6 +88,7 @@ public class HabitacionControlador {
         return habitacion;
     }
 
+    @Override
     public void updateHabitacion(Habitacion habitacion) {
         try {
             PreparedStatement statement = connection.prepareStatement(
@@ -104,6 +110,7 @@ public class HabitacionControlador {
         }
     }
 
+    @Override
     public void deleteHabitacion(int numero_habitacion) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM habitaciones WHERE numero_habitacion = ?");
@@ -116,5 +123,18 @@ public class HabitacionControlador {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Habitacion> getHabitacionesDisponibles() {
+        List<Habitacion> habitacionesDisponibles = new ArrayList<>();
+        List<Habitacion> todasLasHabitaciones = getAllHabitaciones();
+
+        for (Habitacion habitacion : todasLasHabitaciones) {
+            if (habitacion.isDisponibilidad() && !habitacion.isLimpieza()) {
+                habitacionesDisponibles.add(habitacion);
+            }
+        }
+
+        return habitacionesDisponibles;
     }
 }

@@ -1,12 +1,17 @@
 package modelo;
 
+import javax.swing.JOptionPane;
+import controlador.ClienteControlador;
+
 public class Cliente {
-    private int id_huesped;
+    private int id_huesped; // ID huesped = DNI 
     private String nombre_huesped;
     private String apellido;
     private String correo;
     private String telefono;
     private String resena;
+   
+
 
     public Cliente(int id_huesped, String nombre_huesped, String apellido, String correo, String telefono, String resena) {
         this.id_huesped = id_huesped;
@@ -70,4 +75,20 @@ public class Cliente {
         return "Cliente [id_huesped=" + id_huesped + ", nombre_huesped=" + nombre_huesped + ", apellido=" + apellido
                 + ", correo=" + correo + ", telefono=" + telefono + ", resena=" + resena + "]";
     }
+
+    public static Cliente pedirDatosCliente() {
+    	int dni = Integer.parseInt(JOptionPane.showInputDialog("Ingresar DNI"));
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del cliente:\n tene en cuenta que este es el nombre que se guarda en la reserva");
+        String apellido = JOptionPane.showInputDialog("Ingrese el apellido del cliente:");
+        String correo = JOptionPane.showInputDialog("Ingrese el correo del cliente:");
+        String telefono = JOptionPane.showInputDialog("Ingrese el teléfono del cliente:");
+        String resena = "";
+        
+        Cliente cliente = new Cliente(dni, nombre, apellido, correo, telefono, resena);
+        ClienteControlador clienteControlador = new ClienteControlador();
+        clienteControlador.addCliente(cliente);
+        return cliente;
+    }
+
+   
 }
