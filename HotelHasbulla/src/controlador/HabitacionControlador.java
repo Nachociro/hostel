@@ -130,7 +130,7 @@ public class HabitacionControlador implements HabitacionRepository {
         List<Habitacion> todasLasHabitaciones = getAllHabitaciones();
 
         for (Habitacion habitacion : todasLasHabitaciones) {
-            if (habitacion.isDisponibilidad() && !habitacion.isLimpieza()) {
+            if (habitacion.isDisponibilidad()) {
                 habitacionesDisponibles.add(habitacion);
             }
         }

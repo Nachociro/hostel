@@ -1,6 +1,9 @@
 package vista;
 import javax.swing.JOptionPane;
+import controlador.HabitacionControlador;
 import controlador.UsuarioControlador;
+import modelo.SingletonHabitaciones;
+import modelo.Habitacion;
 import modelo.SingletonHabitaciones;
 public class Main {
 
@@ -8,7 +11,7 @@ public class Main {
     	
     	 UsuarioControlador controlador = new UsuarioControlador();
          SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
-    	
+         crearHabitacionesPrueba();
     	
     	
         int opcion = 0;
@@ -108,4 +111,20 @@ public class Main {
 
         return seleccion + 1;
     }
+    public static void crearHabitacionesPrueba() {
+        HabitacionControlador controlador = new HabitacionControlador();
+
+        
+        Habitacion habitacion1 = new Habitacion(101, "Individual", "Habitación individual estándar", 50.0, true, true);
+        Habitacion habitacion2 = new Habitacion(102, "Doble", "Habitación doble estándar", 75.0, true, false);
+        Habitacion habitacion3 = new Habitacion(103, "Suite", "Suite de lujo con vista al mar", 150.0, true, true);
+
+      
+        controlador.addHabitacion(habitacion1);
+        controlador.addHabitacion(habitacion2);
+        controlador.addHabitacion(habitacion3);
+
+        System.out.println("Habitaciones de prueba creadas exitosamente.");
+    }
+
 }
