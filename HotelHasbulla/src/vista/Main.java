@@ -48,9 +48,11 @@ public class Main {
                 switch (opcion) {
                     case 1:
                         JOptionPane.showMessageDialog(null, "Empezando la limpieza rapida");
+                        singleton.LimpiezaHabitacion();
                         break;
                     case 2:
                         JOptionPane.showMessageDialog(null, "Empezando la limpieza para nuevo huesped");
+                        singleton.tipoLimpieza();
                         break;
                     case 3:
                         JOptionPane.showMessageDialog(null, "Saliendo del programa");
@@ -66,9 +68,12 @@ public class Main {
                 switch (opcion) {
                     case 1:
                         JOptionPane.showMessageDialog(null, "Gestionando personal de limpieza");
+                        singleton.LimpiezaHabitacion();
                         break;
                     case 2:
                         JOptionPane.showMessageDialog(null, "Gestionando habitaciones");
+                        singleton.LimpiezaHabitacion();
+
                         break;
                     case 3:
                         JOptionPane.showMessageDialog(null, "Saliendo del programa");

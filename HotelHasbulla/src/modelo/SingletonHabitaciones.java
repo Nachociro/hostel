@@ -195,4 +195,20 @@ public class SingletonHabitaciones {
         habitacionControlador.updateHabitacion(habitacion);
         reservaControlador.deleteReserva(reserva.getId_reserva());
     }
+
+	public void tipoLimpieza() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void LimpiezaHabitacion1() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void LimpiezaHabitacion() {
+		// TODO Auto-generated method stub
+		
+	}
 }
