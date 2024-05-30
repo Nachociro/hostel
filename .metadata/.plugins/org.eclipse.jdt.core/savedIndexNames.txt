@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-INDEX VERSION 1.134+C:\Users\User\OneDrive\Documents\GitHub\hostel\.metadata\.plugins\org.eclipse.jdt.core
-985749750.index
-4114865401.index
-1865797976.index
-=======
 INDEX VERSION 1.132+C:\Users\Pity\Documents\GitHub\hostel\.metadata\.plugins\org.eclipse.jdt.core
 3413725848.index
+4114865401.index
 1865797976.index
 532394629.index
->>>>>>> Nacho

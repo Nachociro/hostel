@@ -67,7 +67,7 @@ public class SingletonHabitaciones {
             Reserva nuevaReserva = new Reserva(Reserva.generarIdReserva(), fechaEntrada, fechaSalida, cliente.getId_huesped(), numeroHabitacion, cliente.getNombre_huesped());
             reservaControlador.addReserva(nuevaReserva);
 
-            mostrarConfirmacionReserva(numeroHabitacion, cliente.getNombre_huesped(), fechaEntrada, fechaSalida);
+            mostrarConfirmacionReserva(nuevaReserva.getId_reserva(), numeroHabitacion, cliente.getNombre_huesped(), fechaEntrada, fechaSalida);
             return true;
         } catch (Exception e) {
             mostrarError(e.getMessage());
@@ -92,7 +92,7 @@ public class SingletonHabitaciones {
     }
 
     private void mostrarConfirmacionReserva(int id_reserva, int numeroHabitacion, String nombreCliente, Date fechaEntrada, Date fechaSalida) {
-        JOptionPane.showMessageDialog(null, "Habitación " + numeroHabitacion + " reservada a nombre de " + nombreCliente + " para la fecha de " + fechaEntrada + " hasta la fecha de " + fechaSalida);
+        JOptionPane.showMessageDialog(null, "Se hizo la reserva numero: " + id_reserva + "\n Para la habitación " + numeroHabitacion + " \nReservada a nombre de " + nombreCliente + " \nPara la fecha de " + fechaEntrada + " \nHasta la fecha de " + fechaSalida);
     }
 
     private void mostrarError(String mensajeError) {
@@ -166,7 +166,7 @@ public class SingletonHabitaciones {
                                 realizarCheckOut(reserva);
                                 JOptionPane.showMessageDialog(null, "Check-Out realizado con éxito.");
                             } else if (seleccion == 1) {
-                                // El huésped decide quedarse, no se realiza el check-out
+                              JOptionPane.showMessageDialog(null, "Que disfrute los dias que le quedan");
                             }
                         } else if (fechaSalida.isAfter(fechaActual)) {
                             JOptionPane.showMessageDialog(null, "La fecha de salida es posterior a la fecha actual. Se cobrará un extra.");
@@ -190,6 +190,10 @@ public class SingletonHabitaciones {
         } while (!opcion.equals("2"));
     }
     private void realizarCheckOut(Reserva reserva) {   
+    	String reseña = JOptionPane.showInputDialog("Por favor, deja una reseña sobre tu estancia:");
+    	Cliente cliente = Cliente.pedirDatosCliente();
+    	cliente.setResena(reseña);
+    	
         Habitacion habitacion = habitacionControlador.getHabitacionByNumero(reserva.getNumero_habitacion());        
         habitacion.setDisponibilidad(true);        
         habitacionControlador.updateHabitacion(habitacion);

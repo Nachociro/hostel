@@ -27,7 +27,7 @@ public class ReservaControlador implements ReservaRepository {
             statement.setDate(2, (Date) reserva.getFecha_salida());
             statement.setInt(3, reserva.getId_huesped());
             statement.setInt(4, reserva.getNumero_habitacion());
-            statement.setString(5, reserva.getNombreHuesped());
+            statement.setInt(5, reserva.getId_huesped());
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -96,7 +96,7 @@ public class ReservaControlador implements ReservaRepository {
             statement.setDate(2, (Date) reserva.getFecha_salida());
             statement.setInt(3, reserva.getId_huesped());
             statement.setInt(4, reserva.getNumero_habitacion());
-            statement.setString(5, reserva.getNombreHuesped());
+            statement.setInt(5, reserva.getId_huesped());
             statement.setInt(6, reserva.getId_reserva());
 
             int rowsUpdated = statement.executeUpdate();

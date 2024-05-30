@@ -6,8 +6,8 @@ public class Main {
 
     public static void main(String[] args) {
     	
-    	UsuarioControlador controlador = new UsuarioControlador();
-    	
+    	 UsuarioControlador controlador = new UsuarioControlador();
+         SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
     	
     	
     	
@@ -21,24 +21,29 @@ public class Main {
                 opcion = mostrarMenuRecepcionista();
                 switch (opcion) {
                     case 1:
-                        JOptionPane.showMessageDialog(null, "Reservando habitación"); // hacer reserva
-              //    SingletonHabitaciones.reservarHabitacion();
+                        JOptionPane.showMessageDialog(null, "Reservando habitación");
+                        singleton.reservarHabitacion();
                         break;
                     case 2:
-                        JOptionPane.showMessageDialog(null, "Gestionar habitacion"); // check in y check out
+                        JOptionPane.showMessageDialog(null, "Hacer check in"); 
+                        singleton.hacerCheckIn();
                         break;
                     case 3:
+                        JOptionPane.showMessageDialog(null, "Hacer check out");
+                        singleton.hacerCheckOut();
+                        break;
+                    case 4:
                         JOptionPane.showMessageDialog(null, "Gestionar pileta"); // ingresar y egresar de la pileta
                         
                         break;
-                    case 4:
+                    case 5:
                         JOptionPane.showMessageDialog(null, "Gestionar reservas de extras"); // reservar o liberar canchas de fulbo, tenis y pileta
                         break;
-                    case 5:
+                    case 6:
                         JOptionPane.showMessageDialog(null, "Saliendo del programa");
                         break;                     
              }
-            	} while (opcion != 5);
+            	} while (opcion != 6);
             } 
 
 
@@ -86,7 +91,7 @@ public class Main {
 }
 
     public static int mostrarMenuRecepcionista() {
-        String[] opciones = {"Reservar una habitación","Gestionar una habitacion","Gestionar pileta","Gestionar reservas de canchas","Salir"};
+        String[] opciones = {"Reservar una habitación","Hacer Chek-in","Hacer Chek-out","Gestionar pileta","Gestionar reservas de canchas","Salir"};
 
         int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una acción:", "Menú Recepcionista", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
