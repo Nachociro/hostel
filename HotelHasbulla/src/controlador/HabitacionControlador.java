@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class HabitacionControlador implements HabitacionRepository {
     private final Connection connection;
 
@@ -44,7 +46,7 @@ public class HabitacionControlador implements HabitacionRepository {
     public List<Habitacion> getAllHabitaciones() {
         List<Habitacion> habitaciones = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM habitaciones");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM habitacion");
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {

@@ -11,7 +11,7 @@ public class Main {
     	
     	 UsuarioControlador controlador = new UsuarioControlador();
          SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
-         crearHabitacionesPrueba();
+       //  crearHabitacionesPrueba();
     	
     	
         int opcion = 0;
