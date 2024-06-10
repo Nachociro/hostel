@@ -27,6 +27,7 @@ public class SingletonHabitaciones {
     public boolean reservarHabitacion() {
         try {
            
+        	
             Date fechaEntrada = pedirFecha("Ingrese la fecha de entrada (yyyy-MM-dd):");
             Date fechaSalida = pedirFecha("Ingrese la fecha de salida (yyyy-MM-dd):");
 

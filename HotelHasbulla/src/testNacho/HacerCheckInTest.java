@@ -1,15 +1,15 @@
 package testNacho;
 
+import static org.junit.Assert.*;
+import org.junit.Test;
 import modelo.SingletonHabitaciones;
-import javax.swing.JOptionPane;
 
 public class HacerCheckInTest {
-    public static void main(String[] args) {
-        
+
+    @Test
+    public void testHacerCheckIn() {
         SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
-
-        singleton.hacerCheckIn(); 
-
-        JOptionPane.showMessageDialog(null, "Check-In completado.");
+        singleton.hacerCheckIn();
+        
     }
 }

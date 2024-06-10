@@ -5,8 +5,8 @@ public class Habitacion {
     private String tipo;
     private String descripcion;
     private double precio;
-    private boolean disponibilidad;
-    private boolean limpieza;
+    private boolean disponibilidad;// falsa 
+    private boolean limpieza; // falsa 
 
     public Habitacion(int numero_habitacion, String tipo, String descripcion, double precio, boolean disponibilidad, boolean limpieza) {
         this.numero_habitacion = numero_habitacion;
