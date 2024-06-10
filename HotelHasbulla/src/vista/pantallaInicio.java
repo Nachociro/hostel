@@ -22,7 +22,7 @@ public class pantallaInicio extends JFrame {
     private JPanel contentPane;
     private JPasswordField passwordField;
 
-    // Definimos las contraseñas como constantes
+    
     private static final String CONTRASENA_ADMIN = "ADMIN";
     private static final String CONTRASENA_EMPLEADO = "1234";
 
