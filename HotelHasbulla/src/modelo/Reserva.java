@@ -68,7 +68,7 @@ public class Reserva {
         return id_huesped;
     }
 
-    public void setId_huesped(int id_huesped) {
+    public void setId_huesped(String nombreHuesped) {
         this.id_huesped = id_huesped;
     }
 
