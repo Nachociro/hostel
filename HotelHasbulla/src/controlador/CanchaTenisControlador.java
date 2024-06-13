@@ -61,7 +61,7 @@ public class CanchaTenisControlador {
     public void addCancha(CanchaTenis cancha) {
         String query = "INSERT INTO CanchaTenis (piso, precio, disponible) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, cancha.getpiso());
+            statement.setString(1, cancha.getPiso());
             statement.setDouble(2, cancha.getPrecio());
             statement.setBoolean(3, cancha.isDisponible());
             
@@ -77,7 +77,7 @@ public class CanchaTenisControlador {
     public void updateCancha(CanchaTenis cancha) {
         String query = "UPDATE CanchaTenis SET piso = ?, precio = ?, disponible = ? WHERE id_Tenis = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, cancha.getpiso());
+            statement.setString(1, cancha.getPiso());
             statement.setDouble(2, cancha.getPrecio());
             statement.setBoolean(3, cancha.isDisponible());
             statement.setInt(4, cancha.getId_Tenis());
@@ -102,6 +102,22 @@ public class CanchaTenisControlador {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void reservarCancha(int id, int numPersonas) {
+        CanchaTenis cancha = getCanchaById(id);
+        if (cancha != null) {
+            cancha.reservarCancha(numPersonas);
+            updateCancha(cancha);
+        }
+    }
+
+    public void cancelarReserva(int id) {
+        CanchaTenis cancha = getCanchaById(id);
+        if (cancha != null) {
+            cancha.cancelarReserva();
+            updateCancha(cancha);
         }
     }
 }

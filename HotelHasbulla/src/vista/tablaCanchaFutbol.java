@@ -31,8 +31,8 @@ public class tablaCanchaFutbol extends JFrame {
     private CanchaFutbolControlador controlador;
     private JLabel elemento;
     private JButton reservarButton;
+    private JButton cancelarButton;
 
-    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -82,13 +82,10 @@ public class tablaCanchaFutbol extends JFrame {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
                     int id = (int) table.getValueAt(selectedRow, 0);
-                    CanchaFutbol cancha = controlador.getCanchaById(id);
-                    if (cancha != null) {
-                        cancha.reservarCancha();
-                        actualizarTabla();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Cancha no encontrada.");
-                    }
+                    String numPersonasStr = JOptionPane.showInputDialog("Ingrese el número de personas que jugarán:");
+                    int numPersonas = Integer.parseInt(numPersonasStr);
+                    controlador.reservarCancha(id, numPersonas);
+                    actualizarTabla();
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
                 }
@@ -96,6 +93,22 @@ public class tablaCanchaFutbol extends JFrame {
         });
         reservarButton.setBounds(253, 280, 187, 58);
         contentPane.add(reservarButton);
+
+        cancelarButton = new JButton("Cancelar Reserva");
+        cancelarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    int id = (int) table.getValueAt(selectedRow, 0);
+                    controlador.cancelarReserva(id);
+                    actualizarTabla();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
+                }
+            }
+        });
+        cancelarButton.setBounds(450, 280, 187, 58);
+        contentPane.add(cancelarButton);
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBounds(15, 220, 101, 22);

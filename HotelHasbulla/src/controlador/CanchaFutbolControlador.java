@@ -104,4 +104,29 @@ public class CanchaFutbolControlador {
             e.printStackTrace();
         }
     }
+
+    public void reservarCancha(int id, int numPersonas) {
+        CanchaFutbol cancha = getCanchaById(id);
+        if (cancha != null && cancha.isDisponible()) {
+            if (numPersonas >= 8) {
+                cancha.setPrecio(cancha.getPrecio() * 0.75);
+            }
+            cancha.setDisponible(false);
+            updateCancha(cancha);
+            System.out.println("Cancha " + id + " reservada con éxito. Precio final: " + cancha.getPrecio());
+        } else {
+            System.out.println("Cancha " + id + " no está disponible para reservar.");
+        }
+    }
+
+    public void cancelarReserva(int id) {
+        CanchaFutbol cancha = getCanchaById(id);
+        if (cancha != null && !cancha.isDisponible()) {
+            cancha.setDisponible(true);
+            updateCancha(cancha);
+            System.out.println("Reserva de la cancha " + id + " cancelada con éxito.");
+        } else {
+            System.out.println("La cancha " + id + " no está reservada.");
+        }
+    }
 }

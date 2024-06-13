@@ -31,7 +31,7 @@ public class tablaCanchaTenis extends JFrame {
     private CanchaTenisControlador controlador;
     private JLabel elemento;
     private JButton reservarButton;
-
+    private JButton cancelarReservaButton;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -45,7 +45,6 @@ public class tablaCanchaTenis extends JFrame {
             }
         });
     }
-
 
     public tablaCanchaTenis() {
         this.setVisible(true);
@@ -83,13 +82,10 @@ public class tablaCanchaTenis extends JFrame {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
                     int id = (int) table.getValueAt(selectedRow, 0);
-                    CanchaTenis cancha = controlador.getCanchaById(id);
-                    if (cancha != null) {
-                        cancha.reservarCancha();
-                        actualizarTabla();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Cancha no encontrada.");
-                    }
+                    String numPersonasStr = JOptionPane.showInputDialog("Ingrese el número de personas:");
+                    int numPersonas = Integer.parseInt(numPersonasStr);
+                    controlador.reservarCancha(id, numPersonas);
+                    actualizarTabla();
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
                 }
@@ -97,6 +93,22 @@ public class tablaCanchaTenis extends JFrame {
         });
         reservarButton.setBounds(253, 280, 187, 58);
         contentPane.add(reservarButton);
+
+        cancelarReservaButton = new JButton("Cancelar Reserva");
+        cancelarReservaButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    int id = (int) table.getValueAt(selectedRow, 0);
+                    controlador.cancelarReserva(id);
+                    actualizarTabla();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
+                }
+            }
+        });
+        cancelarReservaButton.setBounds(450, 280, 187, 58);
+        contentPane.add(cancelarReservaButton);
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBounds(15, 220, 101, 22);
@@ -136,7 +148,7 @@ public class tablaCanchaTenis extends JFrame {
             model.addRow(
                 new Object[] {
                     cancha.getId_Tenis(),
-                    cancha.getpiso(),
+                    cancha.getPiso(),
                     cancha.getPrecio(),
                     cancha.isDisponible()
                 }
