@@ -1,8 +1,6 @@
 package vista;
-
-
+import java.awt.Color;
 import java.awt.EventQueue;
-import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -11,17 +9,16 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import modelo.Pileta;
 import controlador.PiletaControlador;
+import modelo.Pileta;
+import vista.pantallaInicio;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JMenuBar;
 
 public class TablaPileta extends JFrame {
 
@@ -55,34 +52,30 @@ public class TablaPileta extends JFrame {
      * Create the frame.
      */
     public TablaPileta() {
-        this.setVisible(true);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 909, 452);
         contentPane = new JPanel();
+        contentPane.setBackground(new Color(128, 64, 64));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
         setContentPane(contentPane);
+        contentPane.setLayout(null);
 
         // Inicializar controlador y pileta seleccionada
         controlador = new PiletaControlador();
         seleccionada = controlador.getPileta(); // Obtener la única pileta
 
         // Crear la tabla y el modelo
-        String[] columnNames = {"Capacidad Máxima", "Capacidad Actual", "Llena"};
+        String[] columnNames = { "Capacidad Máxima", "Capacidad Actual", "Llena" };
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         actualizarTabla();
-        contentPane.setLayout(null);
-
-        // Crear el JScrollPane y agregar la tabla
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(5, 19, 900, 190);
+        scrollPane.setBounds(0, 10, 900, 190);
         contentPane.add(scrollPane);
 
         // Crear el JLabel para mostrar la selección
         elemento = new JLabel("Seleccionado:");
-        elemento.setBounds(5, 5, 900, 14);
+        elemento.setBounds(10, 210, 880, 14);
         contentPane.add(elemento);
 
         ingresarButton = new JButton("Ingresar Personas");
@@ -92,7 +85,7 @@ public class TablaPileta extends JFrame {
                 actualizarTabla();
             }
         });
-        ingresarButton.setBounds(253, 280, 187, 58);
+        ingresarButton.setBounds(10, 303, 165, 35);
         contentPane.add(ingresarButton);
 
         retirarButton = new JButton("Retirar Personas");
@@ -102,12 +95,28 @@ public class TablaPileta extends JFrame {
                 actualizarTabla();
             }
         });
-        retirarButton.setBounds(453, 280, 187, 58);
+        retirarButton.setBounds(10, 348, 165, 35);
         contentPane.add(retirarButton);
 
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(15, 220, 101, 22);
-        contentPane.add(menuBar);
+        JButton btnSalir = new JButton("Salir");
+        btnSalir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Cierra la ventana actual
+            }
+        });
+        btnSalir.setBounds(683, 348, 165, 35);
+        contentPane.add(btnSalir);
+
+        JButton btnVolverInicio = new JButton("Volver al inicio");
+        btnVolverInicio.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                pantallaInicio inicio = new pantallaInicio();
+                inicio.setVisible(true); // Abre la pantalla de inicio
+                dispose(); // Cierra la ventana actual
+            }
+        });
+        btnVolverInicio.setBounds(683, 303, 165, 35);
+        contentPane.add(btnVolverInicio);
 
         // Configurar el modelo de selección
         ListSelectionModel selectionModel = table.getSelectionModel();
@@ -123,7 +132,8 @@ public class TablaPileta extends JFrame {
                         int capacidadMaxima = 50; // Capacidad máxima siempre es 50
                         int capacidadActual = (int) table.getValueAt(selectedRow, 1);
                         boolean llena = (boolean) table.getValueAt(selectedRow, 2);
-                        elemento.setText("Seleccionado: Capacidad Máxima=" + capacidadMaxima + ", Capacidad Actual=" + capacidadActual);
+                        elemento.setText("Seleccionado: Capacidad Máxima=" + capacidadMaxima + ", Capacidad Actual="
+                                + capacidadActual);
                     }
                 }
             }
@@ -135,12 +145,7 @@ public class TablaPileta extends JFrame {
         model.setRowCount(0);
 
         // Agregar los datos al modelo
-        model.addRow(
-            new Object[] {
-                50, // Capacidad máxima siempre es 50
-                seleccionada.getCantidadPersonas(),
-                seleccionada.getCantidadPersonas() >= 50
-            }
-        );
+        model.addRow(new Object[] { 50, // Capacidad máxima siempre es 50
+                seleccionada.getCantidadPersonas(), seleccionada.getCantidadPersonas() >= 50 });
     }
 }

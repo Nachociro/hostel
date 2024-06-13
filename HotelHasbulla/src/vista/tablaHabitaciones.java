@@ -75,7 +75,28 @@ public class tablaHabitaciones extends JFrame {
             }
         });
         panel.add(btnDisponibles);
+        
+                JButton btnVolverInicio = new JButton("Volver al inicio");
+                panel.add(btnVolverInicio);
+                btnVolverInicio.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        pantallaInicio inicio = new pantallaInicio();
+                        inicio.setVisible(true); // Abre la pantalla de inicio
+                        dispose(); // Cierra la ventana actual
+                    }
+                });
+                btnVolverInicio.setBounds(683, 303, 165, 35);
+        JButton btnSalir = new JButton("Salir");
+        panel.add(btnSalir);
+        btnSalir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Cierra la ventana actual
+            }
+        });
+        btnSalir.setBounds(683, 348, 165, 35);
+        
     }
+    
 
     private void actualizarTabla(List<Habitacion> habitaciones) {
         model.setRowCount(0); 

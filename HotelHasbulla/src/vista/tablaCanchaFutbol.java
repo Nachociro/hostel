@@ -110,9 +110,26 @@ public class tablaCanchaFutbol extends JFrame {
         cancelarButton.setBounds(450, 280, 187, 58);
         contentPane.add(cancelarButton);
 
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(15, 220, 101, 22);
-        contentPane.add(menuBar);
+        JButton btnSalir = new JButton("Salir");
+        btnSalir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Cierra la ventana actual
+            }
+        });
+        btnSalir.setBounds(683, 348, 165, 35);
+        contentPane.add(btnSalir);
+
+        JButton btnVolverInicio = new JButton("Volver al inicio");
+        btnVolverInicio.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                pantallaInicio inicio = new pantallaInicio();
+                inicio.setVisible(true); // Abre la pantalla de inicio
+                dispose(); // Cierra la ventana actual
+            }
+        });
+        btnVolverInicio.setBounds(683, 303, 165, 35);
+        contentPane.add(btnVolverInicio);
+        
 
         // Configurar el modelo de selección
         ListSelectionModel selectionModel = table.getSelectionModel();
