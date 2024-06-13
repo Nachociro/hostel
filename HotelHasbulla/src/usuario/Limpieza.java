@@ -1,49 +1,51 @@
 package usuario;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 import javax.swing.JOptionPane;
 
-class LimpiezaHabitacion {
+public class Limpieza {
+
     int idLimpieza;
     int numeroHabitacion;
     LocalDate fecha;
     String hora;
 
-    public LimpiezaHabitacion(int idLimpieza, int numeroHabitacion, LocalDate fecha, String hora) {
+    public Limpieza(int idLimpieza, int numeroHabitacion, LocalDate fecha, String hora) {
         this.idLimpieza = idLimpieza;
         this.numeroHabitacion = numeroHabitacion;
         this.fecha = fecha;
         this.hora = hora;
     }
-        public boolean validarFechaYHora() {
-            LocalDate fechaActual = LocalDate.now();
-            LocalTime horaActual = LocalTime.now();
-            return fecha.isAfter(fechaActual) || (fecha.isEqual(fechaActual) && LocalTime.parse(hora).isAfter(horaActual));
-        }
 
-        public String tipoLimpieza() {
-            if (habitacionTieneReservaActiva()) {
-                return "Limpieza de Rutina";
-            } else {
-                return "Limpieza Definitiva";
-            }
-        }
+    public boolean validarFechaYHora() {
+        LocalDate fechaActual = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+        return fecha.isAfter(fechaActual) || (fecha.isEqual(fechaActual) && LocalTime.parse(hora).isAfter(horaActual));
+    }
 
-        public void duracionLimpieza() {
-            if (tipoLimpieza().equals("Limpieza de Rutina")) {
-            	JOptionPane.showInputDialog("La limpieza durara 5 minutos", fecha);
-            } else {
-            	JOptionPane.showInputDialog("La limpieza durara 15 minutos", fecha);
-            }
+    public String tipoLimpieza() {
+        if (habitacionTieneReservaActiva()) {
+            return "Limpieza de Rutina";
+        } else {
+            return "Limpieza Definitiva";
         }
+    }
 
-        private boolean habitacionTieneReservaActiva() {
-            return false;
+    public void duracionLimpieza() {
+        if (tipoLimpieza().equals("Limpieza de Rutina")) {
+            JOptionPane.showInputDialog("La limpieza durará 5 minutos", fecha);
+        } else {
+            JOptionPane.showInputDialog("La limpieza durará 15 minutos", fecha);
         }
+    }
 
-        public int getIdLimpieza() {
+    private boolean habitacionTieneReservaActiva() {
+        return false; // Lógica para verificar si hay una reserva activa en la habitación
+    }
+
+    public int getIdLimpieza() {
         return idLimpieza;
     }
 
