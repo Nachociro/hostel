@@ -1,5 +1,0 @@
-package vista;
-
-class tablaLimpieza {
-
-}
