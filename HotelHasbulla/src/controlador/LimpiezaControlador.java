@@ -1,30 +1,74 @@
 package controlador;
 
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-
-import testEma.LimpiezaHabitacion;
-import usuario.Limpieza; // Asumiendo que esta es la clase correcta a importar
+import usuario.Limpieza;
 
 public class LimpiezaControlador {
 
-    // Método para eliminar una limpieza por su ID
-    public void deleteLimpieza(int idLimpieza) {
-        // Aquí deberías escribir la lógica para eliminar una limpieza por su ID
-        // Por ejemplo, si estás trabajando con una base de datos:
-        // limpiezaDAO.deleteLimpieza(idLimpieza);
-        // O si estás utilizando alguna otra forma de almacenamiento de datos:
-        // limpiezaRepository.deleteLimpieza(idLimpieza);
-        // O cualquier otra lógica que se ajuste a tu aplicación
+    private Connection connection;
+
+    public LimpiezaControlador() {
+        connection = DatabaseConnection.getInstance().getConnection();
     }
 
-    // Método para obtener todas las limpiezas
-    public List<LimpiezaHabitacion> getAllLimpiezas() {
-        // Aquí deberías escribir la lógica para obtener todas las limpiezas
-        // Por ejemplo, si estás trabajando con una base de datos:
-        // return limpiezaDAO.getAllLimpiezas();
-        // O si estás utilizando alguna otra forma de almacenamiento de datos:
-        // return limpiezaRepository.getAllLimpiezas();
-        // O cualquier otra lógica que se ajuste a tu aplicación
-        return null; // Por ahora retornamos null ya que la implementación concreta depende de cómo accedas a los datos
+    public List<Limpieza> getAllLimpiezas() {
+        List<Limpieza> limpiezas = new ArrayList<>();
+        String query = "SELECT * FROM limpieza";
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int idLimpieza = rs.getInt("idLimpieza");
+                int numeroHabitacion = rs.getInt("numeroHabitacion");
+                LocalDate fecha = rs.getDate("fecha").toLocalDate();
+                String hora = rs.getString("hora");
+                Limpieza limpieza = new Limpieza(idLimpieza, numeroHabitacion, fecha, hora);
+                limpiezas.add(limpieza);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return limpiezas;
+    }
+
+    public void deleteLimpieza(int idLimpieza) {
+        String query = "DELETE FROM limpieza WHERE idLimpieza = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, idLimpieza);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateLimpieza(Limpieza limpieza) {
+        String query = "UPDATE limpieza SET numeroHabitacion = ?, fecha = ?, hora = ? WHERE idLimpieza = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, limpieza.getNumeroHabitacion());
+            pstmt.setDate(2, Date.valueOf(limpieza.getFecha()));
+            pstmt.setString(3, limpieza.getHora());
+            pstmt.setInt(4, limpieza.getIdLimpieza());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // Método para añadir una nueva limpieza (opcional)
+    public void addLimpieza(Limpieza limpieza) {
+        String query = "INSERT INTO limpieza (numeroHabitacion, fecha, hora) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, limpieza.getNumeroHabitacion());
+            pstmt.setDate(2, Date.valueOf(limpieza.getFecha()));
+            pstmt.setString(3, limpieza.getHora());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
