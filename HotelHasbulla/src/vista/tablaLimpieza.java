@@ -33,8 +33,8 @@ public class tablaLimpieza extends JFrame {
     private DefaultTableModel model;
     private LimpiezaControlador controlador; 
     private JLabel elemento;
-    private Limpieza seleccionado;
-    private JButton Editar;
+    private Limpieza limpiezaSeleccionada;
+    private JButton btnEditar;
 
     /**
      * Launch the application.
@@ -65,9 +65,9 @@ public class tablaLimpieza extends JFrame {
 
         setContentPane(contentPane);
 
-        // Inicializar controlador y usuario seleccionado
+        // Inicializar controlador y limpieza seleccionada
         controlador = new LimpiezaControlador();
-        seleccionado = new Limpieza(0, 0, LocalDate.now(), "00:00");
+        limpiezaSeleccionada = new Limpieza(0, 0, LocalDate.now(), "00:00");
 
         // Crear la tabla y el modelo
         String[] columnNames = {"ID Limpieza", "Número Habitación", "Fecha", "Hora"};
@@ -89,35 +89,20 @@ public class tablaLimpieza extends JFrame {
         JButton btnEliminar = new JButton("Eliminar");
         btnEliminar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (seleccionado.getIdLimpieza() != 0) {
-                    controlador.deleteLimpieza(seleccionado.getIdLimpieza());
-                    JOptionPane.showMessageDialog(null, "Eliminado");
-                    actualizarTabla();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Seleccione una limpieza");
-                }
+                eliminarLimpieza();
             }
         });
         btnEliminar.setBounds(53, 280, 187, 58);
         contentPane.add(btnEliminar);
 
-        Editar = new JButton("Editar");
-        Editar.addActionListener(new ActionListener() {
+        btnEditar = new JButton("Editar");
+        btnEditar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (seleccionado.getIdLimpieza() != 0) {
-                    Editar editar = new Editar(seleccionado, controlador);
-                    editar.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Seleccione una limpieza");
-                }
+                abrirEditar();
             }
         });
-        Editar.setBounds(367, 280, 166, 58);
-        contentPane.add(Editar);
-
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(15, 220, 101, 22);
-        contentPane.add(menuBar);
+        btnEditar.setBounds(367, 280, 166, 58);
+        contentPane.add(btnEditar);
 
         // Configurar el modelo de selección
         ListSelectionModel selectionModel = table.getSelectionModel();
@@ -128,18 +113,7 @@ public class tablaLimpieza extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    int selectedRow = table.getSelectedRow();
-                    if (selectedRow != -1) {
-                        int idLimpieza = (int) table.getValueAt(selectedRow, 0);
-                        int numeroHabitacion = (int) table.getValueAt(selectedRow, 1);
-                        LocalDate fecha = LocalDate.parse(table.getValueAt(selectedRow, 2).toString());
-                        String hora = (String) table.getValueAt(selectedRow, 3);
-                        elemento.setText("Seleccionado: ID Limpieza=" + idLimpieza + ", Número Habitación=" + numeroHabitacion + ", Fecha=" + fecha + ", Hora=" + hora);
-                        seleccionado.setIdLimpieza(idLimpieza);
-                        seleccionado.setNumeroHabitacion(numeroHabitacion);
-                        seleccionado.setFecha(fecha);
-                        seleccionado.setHora(hora);
-                    }
+                    actualizarSeleccion();
                 }
             }
         });
@@ -160,6 +134,40 @@ public class tablaLimpieza extends JFrame {
                 limpieza.getFecha(),
                 limpieza.getHora()
             });
+        }
+    }
+
+    private void actualizarSeleccion() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            int idLimpieza = (int) table.getValueAt(selectedRow, 0);
+            int numeroHabitacion = (int) table.getValueAt(selectedRow, 1);
+            LocalDate fecha = LocalDate.parse(table.getValueAt(selectedRow, 2).toString());
+            String hora = (String) table.getValueAt(selectedRow, 3);
+            elemento.setText("Seleccionado: ID Limpieza=" + idLimpieza + ", Número Habitación=" + numeroHabitacion + ", Fecha=" + fecha + ", Hora=" + hora);
+            limpiezaSeleccionada.setIdLimpieza(idLimpieza);
+            limpiezaSeleccionada.setNumeroHabitacion(numeroHabitacion);
+            limpiezaSeleccionada.setFecha(fecha);
+            limpiezaSeleccionada.setHora(hora);
+        }
+    }
+
+    private void eliminarLimpieza() {
+        if (limpiezaSeleccionada.getIdLimpieza() != 0) {
+            controlador.deleteLimpieza(limpiezaSeleccionada.getIdLimpieza());
+            JOptionPane.showMessageDialog(null, "Limpieza eliminada correctamente");
+            actualizarTabla();
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una limpieza para eliminar");
+        }
+    }
+
+    private void abrirEditar() {
+        if (limpiezaSeleccionada.getIdLimpieza() != 0) {
+            Editar editar = new Editar(limpiezaSeleccionada, controlador);
+            editar.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione una limpieza para editar");
         }
     }
 }
