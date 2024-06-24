@@ -90,4 +90,14 @@ public class tablaHabitaciones extends JFrame {
             });
         }
     }
+
+
+
+public String obtenerTipoHabitacionSeleccionada() {
+    int filaSeleccionada = table.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        return (String) table.getValueAt(filaSeleccionada, 1); 
+    }
+    return null; 
+}
 }
