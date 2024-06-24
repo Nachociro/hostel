@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import controlador.HabitacionControlador;
 import modelo.Habitacion;
 import modelo.SingletonHabitaciones;
@@ -44,7 +47,25 @@ public class tablaHabitaciones extends JFrame {
         controlador = new HabitacionControlador();
 
         model = new DefaultTableModel(new String[]{"Número", "Tipo", "Descripción", "Precio", "Disponibilidad", "Limpieza", "Acción"}, 0);
-        table = new JTable(model);
+        table = new JTable(model) {
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component component = super.prepareRenderer(renderer, row, column);
+                if (column == 6) {
+                    JButton btnSeleccionar = new JButton("Seleccionar");
+                    btnSeleccionar.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Habitacion habitacion = controlador.getAllHabitaciones().get(row);
+                            singleton.setSeleccionada(habitacion);
+                            dispose();
+                        }
+                    });
+                    return btnSeleccionar;
+                }
+                return component;
+            }
+        };
 
         JScrollPane scrollPane = new JScrollPane(table);
         contentPane.add(scrollPane, BorderLayout.CENTER);
@@ -75,14 +96,6 @@ public class tablaHabitaciones extends JFrame {
     private void actualizarTabla(List<Habitacion> habitaciones) {
         model.setRowCount(0);
         for (Habitacion habitacion : habitaciones) {
-            JButton btnSeleccionar = new JButton("Seleccionar");
-            btnSeleccionar.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    singleton.setseleccionada(habitacion);
-                    dispose(); // Cerrar la ventana después de seleccionar la habitación
-                }
-            });
             model.addRow(new Object[]{
                 habitacion.getNumero_habitacion(),
                 habitacion.getTipo(),
@@ -90,18 +103,27 @@ public class tablaHabitaciones extends JFrame {
                 habitacion.getPrecio(),
                 habitacion.isDisponibilidad(),
                 habitacion.isLimpieza(),
-                btnSeleccionar
+                "Seleccionar"
             });
         }
+        ajustarColumnas();
     }
 
-
-
-public String obtenerTipoHabitacionSeleccionada() {
-    int filaSeleccionada = table.getSelectedRow();
-    if (filaSeleccionada != -1) {
-        return (String) table.getValueAt(filaSeleccionada, 1); 
+    private void ajustarColumnas() {
+        TableColumn columnaAccion = table.getColumnModel().getColumn(6);
+        columnaAccion.setCellRenderer(new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                return new JButton((String) value);
+            }
+        });
     }
-    return null; 
-}
+
+    public String obtenerTipoHabitacionSeleccionada() {
+        int filaSeleccionada = table.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            return (String) table.getValueAt(filaSeleccionada, 1);
+        }
+        return null;
+    }
 }
