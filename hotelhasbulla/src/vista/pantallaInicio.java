@@ -21,8 +21,8 @@ public class pantallaInicio extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JPasswordField passwordField;
+    private Choice userChoice;
 
-    
     private static final String CONTRASENA_ADMIN = "ADMIN";
     private static final String CONTRASENA_EMPLEADO = "1234";
 
@@ -61,14 +61,14 @@ public class pantallaInicio extends JFrame {
         lblUsuario.setBounds(147, 173, 88, 20);
         contentPane.add(lblUsuario);
 
-        Choice choice = new Choice();
-        choice.setBackground(UIManager.getColor("Button.background"));
-        choice.setForeground(Color.BLACK);
-        choice.setBounds(281, 173, 200, 30);
-        choice.add("admin");
-        choice.add("recepcionista");
-        choice.add("limpieza");
-        contentPane.add(choice);
+        userChoice = new Choice();
+        userChoice.setBackground(UIManager.getColor("Button.background"));
+        userChoice.setForeground(Color.BLACK);
+        userChoice.setBounds(281, 173, 200, 30);
+        userChoice.add("admin");
+        userChoice.add("recepcionista");
+        userChoice.add("limpieza");
+        contentPane.add(userChoice);
 
         JLabel lblContrasena = new JLabel("Contraseña");
         lblContrasena.setFont(new Font("Mandalore", Font.ITALIC, 20));
@@ -98,8 +98,7 @@ public class pantallaInicio extends JFrame {
     }
 
     private String obtenerUsuarioSeleccionado() {
-        Choice choice = (Choice) contentPane.getComponent(3);
-        return choice.getSelectedItem();
+        return userChoice.getSelectedItem();
     }
 
     private void realizarLogin(String usuario, String contrasena) {
