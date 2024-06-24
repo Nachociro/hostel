@@ -4,21 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import controlador.HabitacionControlador;
 import modelo.Habitacion;
-
-import java.sql.Connection;
-import controlador.DatabaseConnection;
-import controlador.UsuarioControlador;
+import modelo.SingletonHabitaciones;
 
 public class tablaHabitaciones extends JFrame {
 
@@ -27,21 +25,15 @@ public class tablaHabitaciones extends JFrame {
     private JTable table;
     private DefaultTableModel model;
     private HabitacionControlador controlador;
+    private SingletonHabitaciones singleton;
+    private Date fechaEntrada;
+    private Date fechaSalida;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    tablaHabitaciones frame = new tablaHabitaciones();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+    public tablaHabitaciones(Date fechaEntrada, Date fechaSalida, SingletonHabitaciones singleton) {
+        this.fechaEntrada = fechaEntrada;
+        this.fechaSalida = fechaSalida;
+        this.singleton = singleton;
 
-    public tablaHabitaciones() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 600);
         contentPane = new JPanel();
@@ -51,7 +43,7 @@ public class tablaHabitaciones extends JFrame {
 
         controlador = new HabitacionControlador();
 
-        model = new DefaultTableModel(new String[]{"Número", "Tipo", "Descripción", "Precio", "Disponibilidad", "Limpieza"}, 0);
+        model = new DefaultTableModel(new String[]{"Número", "Tipo", "Descripción", "Precio", "Disponibilidad", "Limpieza", "Acción"}, 0);
         table = new JTable(model);
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -75,18 +67,30 @@ public class tablaHabitaciones extends JFrame {
             }
         });
         panel.add(btnDisponibles);
+
+        // Actualizar tabla con habitaciones disponibles para las fechas seleccionadas
+        actualizarTabla(controlador.getHabitacionesDisponibles());
     }
 
     private void actualizarTabla(List<Habitacion> habitaciones) {
-        model.setRowCount(0); 
+        model.setRowCount(0);
         for (Habitacion habitacion : habitaciones) {
+            JButton btnSeleccionar = new JButton("Seleccionar");
+            btnSeleccionar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    singleton.setseleccionada(habitacion);
+                    dispose(); // Cerrar la ventana después de seleccionar la habitación
+                }
+            });
             model.addRow(new Object[]{
                 habitacion.getNumero_habitacion(),
                 habitacion.getTipo(),
                 habitacion.getDescripcion(),
                 habitacion.getPrecio(),
                 habitacion.isDisponibilidad(),
-                habitacion.isLimpieza()
+                habitacion.isLimpieza(),
+                btnSeleccionar
             });
         }
     }

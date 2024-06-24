@@ -107,9 +107,9 @@ public class pantallaInicio extends JFrame {
             case "limpieza":
                 if (CONTRASENA_EMPLEADO.equals(contrasena)) {
                     if (usuario.equals("recepcionista")) {
-                        Main.mostrarMenuRecepcionista();
+                        Main.mostrarMenuRecepcionista(this);
                     } else {
-                        Main.mostrarMenuLimpieza();
+                        Main.mostrarMenuLimpieza(this);
                     }
                 } else {
                     mostrarMensajeCredencialesIncorrectas();
@@ -117,7 +117,7 @@ public class pantallaInicio extends JFrame {
                 break;
             case "admin":
                 if (CONTRASENA_ADMIN.equals(contrasena)) {
-                    Main.mostrarMenuAdmin();
+                    Main.mostrarMenuAdmin(this);
                 } else {
                     mostrarMensajeCredencialesIncorrectas();
                 }

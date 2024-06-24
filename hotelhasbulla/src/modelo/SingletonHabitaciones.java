@@ -6,12 +6,13 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import controlador.HabitacionControlador;
 import controlador.ReservaControlador;
+import vista.tablaHabitaciones;
 
 public class SingletonHabitaciones {
     private static SingletonHabitaciones instance;
     public HabitacionControlador habitacionControlador;
     public ReservaControlador reservaControlador;
-
+    private Habitacion seleccionada;
     private SingletonHabitaciones() {
         habitacionControlador = new HabitacionControlador();
         reservaControlador = new ReservaControlador();
@@ -26,49 +27,35 @@ public class SingletonHabitaciones {
 
     public boolean reservarHabitacion() {
         try {
-           
-        	
             Date fechaEntrada = pedirFecha("Ingrese la fecha de entrada (yyyy-MM-dd):");
             Date fechaSalida = pedirFecha("Ingrese la fecha de salida (yyyy-MM-dd):");
 
-            
             if (fechaEntrada.after(fechaSalida)) {
                 JOptionPane.showMessageDialog(null, "La fecha de entrada debe ser anterior a la fecha de salida.");
                 return false;
             }
 
-           
-            List<Habitacion> habitacionesDisponibles = habitacionControlador.getHabitacionesDisponibles();
-            if (habitacionesDisponibles.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No hay habitaciones disponibles para las fechas seleccionadas.");
+            tablaHabitaciones frame = new tablaHabitaciones(fechaEntrada, fechaSalida, this);
+            frame.setVisible(true);
+
+            while (this.seleccionada == null) {
+                Thread.sleep(100);
+            }
+
+            if (seleccionada == null || !seleccionada.isDisponibilidad() || seleccionada.isLimpieza()) {
+                mostrarMensajeHabitacionNoDisponible(seleccionada.getNumero_habitacion());
                 return false;
             }
 
-
-            mostrarHabitacionesDisponibles(habitacionesDisponibles);
-
-            
             Cliente cliente = Cliente.pedirDatosCliente();
 
-            
-            int numeroHabitacion = pedirNumeroHabitacion();
+            seleccionada.setDisponibilidad(false);
+            habitacionControlador.updateHabitacion(seleccionada);
 
-            
-            Habitacion habitacion = habitacionControlador.getHabitacionByNumero(numeroHabitacion);
-            if (habitacion == null || !habitacion.isDisponibilidad() || habitacion.isLimpieza()) {
-                mostrarMensajeHabitacionNoDisponible(numeroHabitacion);
-                return false;
-            }
-
-          
-            habitacion.setDisponibilidad(false);
-            habitacionControlador.updateHabitacion(habitacion);
-
-           
-            Reserva nuevaReserva = new Reserva(Reserva.generarIdReserva(), fechaEntrada, fechaSalida, cliente.getId_huesped(), numeroHabitacion, cliente.getNombre_huesped());
+            Reserva nuevaReserva = new Reserva(Reserva.generarIdReserva(), fechaEntrada, fechaSalida, cliente.getId_huesped(), seleccionada.getNumero_habitacion(), cliente.getNombre_huesped());
             reservaControlador.addReserva(nuevaReserva);
 
-            mostrarConfirmacionReserva(nuevaReserva.getId_reserva(), numeroHabitacion, cliente.getNombre_huesped(), fechaEntrada, fechaSalida);
+            mostrarConfirmacionReserva(nuevaReserva.getId_reserva(), seleccionada.getNumero_habitacion(), cliente.getNombre_huesped(), fechaEntrada, fechaSalida);
             return true;
         } catch (Exception e) {
             mostrarError(e.getMessage());
@@ -76,16 +63,8 @@ public class SingletonHabitaciones {
         }
     }
 
-    private void mostrarHabitacionesDisponibles(List<Habitacion> habitacionesDisponibles) {
-        StringBuilder sb = new StringBuilder("Habitaciones disponibles para las fechas seleccionadas:\n");
-        for (Habitacion habitacion : habitacionesDisponibles) {
-            sb.append("Número: ").append(habitacion.getNumero_habitacion()).append(", Tipo: ").append(habitacion.getTipo()).append("\n");
-        }
-        JOptionPane.showMessageDialog(null, sb.toString());
-    }
-
-    private int pedirNumeroHabitacion() {
-        return Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de la habitación a reservar:"));
+    public void setseleccionada(Habitacion habitacion) {
+        this.seleccionada = habitacion;
     }
 
     private void mostrarMensajeHabitacionNoDisponible(int numeroHabitacion) {
@@ -99,7 +78,6 @@ public class SingletonHabitaciones {
     private void mostrarError(String mensajeError) {
         JOptionPane.showMessageDialog(null, "Error al reservar la habitación: " + mensajeError);
     }
-
 
     private Date pedirFecha(String mensaje) {
         String fechaString = JOptionPane.showInputDialog(mensaje);
