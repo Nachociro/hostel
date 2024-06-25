@@ -32,6 +32,7 @@ public class tablaCanchaTenis extends JFrame {
     private JLabel elemento;
     private JButton reservarButton;
     private JButton cancelarReservaButton;
+    private JButton salirButton;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -91,7 +92,7 @@ public class tablaCanchaTenis extends JFrame {
                 }
             }
         });
-        reservarButton.setBounds(253, 280, 187, 58);
+        reservarButton.setBounds(236, 241, 187, 58);
         contentPane.add(reservarButton);
 
         cancelarReservaButton = new JButton("Cancelar Reserva");
@@ -107,12 +108,18 @@ public class tablaCanchaTenis extends JFrame {
                 }
             }
         });
-        cancelarReservaButton.setBounds(450, 280, 187, 58);
+        cancelarReservaButton.setBounds(463, 241, 187, 58);
         contentPane.add(cancelarReservaButton);
 
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(15, 220, 101, 22);
-        contentPane.add(menuBar);
+        // Botón de Salir
+        salirButton = new JButton("Salir");
+        salirButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Cierra la ventana actual
+            }
+        });
+        salirButton.setBounds(350, 344, 187, 58);
+        contentPane.add(salirButton);
 
         // Configurar el modelo de selección
         ListSelectionModel selectionModel = table.getSelectionModel();

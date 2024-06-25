@@ -32,6 +32,7 @@ public class tablaCanchaFutbol extends JFrame {
     private JLabel elemento;
     private JButton reservarButton;
     private JButton cancelarButton;
+    private JButton salirButton;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -48,12 +49,10 @@ public class tablaCanchaFutbol extends JFrame {
 
     public tablaCanchaFutbol() {
         this.setVisible(true);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 909, 452);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
         setContentPane(contentPane);
 
         // Inicializar controlador
@@ -86,12 +85,13 @@ public class tablaCanchaFutbol extends JFrame {
                     int numPersonas = Integer.parseInt(numPersonasStr);
                     controlador.reservarCancha(id, numPersonas);
                     actualizarTabla();
+                    JOptionPane.showMessageDialog(null, "Cancha reservada con éxito");
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
                 }
             }
         });
-        reservarButton.setBounds(253, 280, 187, 58);
+        reservarButton.setBounds(216, 248, 187, 58);
         contentPane.add(reservarButton);
 
         cancelarButton = new JButton("Cancelar Reserva");
@@ -102,17 +102,26 @@ public class tablaCanchaFutbol extends JFrame {
                     int id = (int) table.getValueAt(selectedRow, 0);
                     controlador.cancelarReserva(id);
                     actualizarTabla();
+                    JOptionPane.showMessageDialog(null, "Reserva cancelada con éxito");
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
                 }
             }
         });
-        cancelarButton.setBounds(450, 280, 187, 58);
+        cancelarButton.setBounds(482, 248, 187, 58);
         contentPane.add(cancelarButton);
 
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(15, 220, 101, 22);
-        contentPane.add(menuBar);
+        // Agregar el botón de "Salir"
+        salirButton = new JButton("Salir");
+        salirButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Cerrar la ventana actual
+                dispose();
+            }
+        });
+        salirButton.setBounds(350, 344, 187, 58);
+        contentPane.add(salirButton);
+
 
         // Configurar el modelo de selección
         ListSelectionModel selectionModel = table.getSelectionModel();

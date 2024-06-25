@@ -5,11 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import modelo.SingletonHabitaciones;
-import modelo.Pileta;
+import modelo.SelectorCanchas;
 
 public class TablaRecepcionista extends JFrame {
 
@@ -70,14 +70,14 @@ public class TablaRecepcionista extends JFrame {
                 SingletonHabitaciones.getInstance().hacerCheckOut();
             }
         });
-
-        // Create and add buttons for pool and courts management
+        
         JButton btnGestionarPileta = new JButton("Gestionar Pileta");
         btnGestionarPileta.setBounds(50, 200, 200, 30);
         contentPane.add(btnGestionarPileta);
         btnGestionarPileta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Pileta.gestionarPileta();
+                TablaPileta tablaPileta = new TablaPileta();
+                tablaPileta.setVisible(true);
             }
         });
 
@@ -86,8 +86,7 @@ public class TablaRecepcionista extends JFrame {
         contentPane.add(btnGestionarCanchas);
         btnGestionarCanchas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-           
-                JOptionPane.showMessageDialog(null, "Gestionando reservas de canchas...");
+                SelectorCanchas.elegirDeporte();
             }
         });
     }

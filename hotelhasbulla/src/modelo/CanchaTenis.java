@@ -55,7 +55,7 @@ public class CanchaTenis {
     public void reservarCancha(int numPersonas) {
         if (disponible) {
             if (numPersonas >= 8) {
-                this.precio *= 0.75; // Aplicar 25% de descuento
+                this.precio *= 0.75;
             }
             disponible = false;
             System.out.println("Cancha " + this.id_Tenis + " reservada con éxito. Precio final: " + this.precio);
@@ -64,9 +64,11 @@ public class CanchaTenis {
         }
     }
 
-    public static void reservarCancha(CanchaTenis[] canchas, int numPersonas) {
+    public static void reservarCancha(CanchaTenis[] canchas) {
         String canchaNum = JOptionPane.showInputDialog("Ingrese el número de la cancha a reservar:");
         int num = Integer.parseInt(canchaNum);
+        String numPersonasStr = JOptionPane.showInputDialog("Ingrese el número de personas que jugarán:");
+        int numPersonas = Integer.parseInt(numPersonasStr);
         boolean canchaEncontrada = false;
 
         for (CanchaTenis cancha : canchas) {
@@ -105,5 +107,34 @@ public class CanchaTenis {
         if (!canchaEncontrada) {
             JOptionPane.showMessageDialog(null, "Cancha no encontrada.");
         }
+    }
+
+    public static void gestionCanchaTenis(CanchaTenis[] canchas) {
+        int opcion;
+        do {
+            opcion = mostrarMenuCancha();
+            switch (opcion) {
+                case 1:
+                    reservarCancha(canchas);
+                    break;
+                case 2:
+                    cancelarReserva(canchas);
+                    break;
+                case 3:
+                    JOptionPane.showMessageDialog(null, "Saliendo del programa");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Opción no válida. Por favor, seleccione una opción válida.");
+                    break;
+            }
+        } while (opcion != 3);
+    }
+
+    public static int mostrarMenuCancha() {
+        String[] opciones = {"Hacer reserva de cancha", "Cancelar reserva de cancha", "Salir"};
+        int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una acción para la cancha de tenis:",
+                "Gestión de Cancha de Tenis", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, opciones, opciones[0]);
+        return seleccion + 1;
     }
 }
