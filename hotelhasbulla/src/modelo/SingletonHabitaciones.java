@@ -7,7 +7,6 @@ import vista.DatosCliente;
 import controlador.HabitacionControlador;
 import controlador.ReservaControlador;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 public class SingletonHabitaciones {
@@ -18,7 +17,7 @@ public class SingletonHabitaciones {
     private java.util.Date fechaEntrada;
     private java.util.Date fechaSalida;
     private boolean fechasSeleccionadas;
-    private DatosCliente datosCliente; // Mantener referencia a DatosCliente
+    private DatosCliente datosCliente;
 
     private SingletonHabitaciones() {
         habitacionControlador = new HabitacionControlador();
@@ -68,39 +67,39 @@ public class SingletonHabitaciones {
             }
         });
     }
-private void abrirDatosCliente() {
-	 PedirDatosCliente();
-}
 
-    public void PedirDatosCliente() {
-        if (datosCliente == null || !datosCliente.isVisible()) {
-            datosCliente = new DatosCliente();
-            datosCliente.setVisible(true);
-        } else {
-            datosCliente.requestFocus();
-        }
+    private void abrirDatosCliente() {
+        pedirDatosCliente();
     }
 
-    public boolean finalizarReserva(String id_huesped) {
-        if (habitacionSeleccionada != null && fechaEntrada != null && fechaSalida != null) {
-            if (datosCliente == null || !datosCliente.isVisible()) {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese los datos del cliente.");
-                return false;
+    public void pedirDatosCliente() {
+        DatosCliente datos = new DatosCliente();
+        datos.setVisible(true);
+
+        datos.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                int dniHuesped = datos.getDniHuesped();
+                finalizarReserva(dniHuesped);
             }
+        });
+    }
+
+    public boolean finalizarReserva(int dniHuesped) {
+        if (habitacionSeleccionada != null && fechaEntrada != null && fechaSalida != null) {
 
             int idReserva = Reserva.generarIdReserva();
-            String nombreCliente = datosCliente.getNombreCliente(); // Obtener nombre del cliente
 
-            Reserva reserva = new Reserva(idReserva, fechaEntrada, fechaSalida, Integer.parseInt(id_huesped),
-                    habitacionSeleccionada.getNumero_habitacion(), nombreCliente);
+            Reserva reserva = new Reserva(idReserva, new Date(fechaEntrada.getTime()), new Date(fechaSalida.getTime()), dniHuesped,
+                    habitacionSeleccionada.getNumero_habitacion());
 
             reservaControlador.addReserva(reserva);
 
-            habitacionSeleccionada.setDisponibilidad(false); // Marcar habitación como no disponible
+            habitacionSeleccionada.setDisponibilidad(false);
 
             JOptionPane.showMessageDialog(null,
                     "Reserva realizada correctamente para habitación número: " + habitacionSeleccionada.getNumero_habitacion()
-                            + "\nDNI del huésped: " + id_huesped);
+                            + "\nDNI del huésped: " + dniHuesped);
 
             return true;
         } else {
@@ -126,8 +125,9 @@ private void abrirDatosCliente() {
                     String dniReserva = JOptionPane.showInputDialog("Ingrese el DNI del huésped:");
                     Reserva reserva = buscarReservaPorDNI(Integer.parseInt(dniReserva));
                     if (reserva != null) {
-                        LocalDate fechaReserva = ((Date) reserva.getFecha_entrada()).toLocalDate();
-                        if (fechaReserva.isEqual(LocalDate.now())) {
+                        java.util.Date fechaReserva = reserva.getFecha_entrada();
+                        java.util.Date fechaActual = new java.util.Date();
+                        if (fechaReserva.equals(fechaActual)) {
                             realizarCheckIn(reserva);
                             JOptionPane.showMessageDialog(null, "Check-In realizado con éxito.");
                         } else {
@@ -170,9 +170,9 @@ private void abrirDatosCliente() {
                     String dniReserva = JOptionPane.showInputDialog("Ingrese el DNI del huésped:");
                     Reserva reserva = buscarReservaPorDNI(Integer.parseInt(dniReserva));
                     if (reserva != null) {
-                        LocalDate fechaSalida = ((Date) reserva.getFecha_salida()).toLocalDate();
-                        LocalDate fechaActual = LocalDate.now();
-                        if (fechaSalida.isBefore(fechaActual)) {
+                        java.util.Date fechaSalida = reserva.getFecha_salida();
+                        java.util.Date fechaActual = new java.util.Date();
+                        if (fechaSalida.before(fechaActual)) {
                             JOptionPane.showMessageDialog(null,
                                     "La fecha de salida es anterior a la fecha actual. Debe pagar el costo total.");
                             String[] opciones = { "Salir igualmente", "Quedarse" };
@@ -185,7 +185,7 @@ private void abrirDatosCliente() {
                             } else if (seleccion == 1) {
                                 JOptionPane.showMessageDialog(null, "Que disfrute los días que le quedan");
                             }
-                        } else if (fechaSalida.isAfter(fechaActual)) {
+                        } else if (fechaSalida.after(fechaActual)) {
                             JOptionPane.showMessageDialog(null,
                                     "La fecha de salida es posterior a la fecha actual. Se cobrará un extra.");
                             realizarCheckOut(reserva);
@@ -225,12 +225,11 @@ private void abrirDatosCliente() {
         // Implementar lógica de tipos de limpieza
     }
 
-    public void LimpiezaHabitacion1() {
+    public void limpiezaHabitacion1() {
         // Implementar lógica de limpieza de habitación 1
     }
 
-    public void LimpiezaHabitacion() {
-        // Implementar lógica de limpieza de habitación
-    }
+    public void limpiezaHabitacion() {
+        // Implement
 }
-
+}

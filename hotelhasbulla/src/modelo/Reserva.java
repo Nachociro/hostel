@@ -1,5 +1,6 @@
 package modelo;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -10,17 +11,15 @@ public class Reserva {
     private int id_reserva;
     private Date fecha_entrada;
     private Date fecha_salida;
-    private int id_huesped;
+    private int dniHuesped; // Nuevo atributo DNI del huésped
     private int numero_habitacion;
-    
 
-    public Reserva(int id_reserva, Date fecha_entrada, Date fecha_salida, int id_huesped, int numero_habitacion, String nombreHuesped) {
+    public Reserva(int id_reserva, Date fecha_entrada, Date fecha_salida, int dniHuesped, int numero_habitacion) {
         this.id_reserva = id_reserva;
         this.fecha_entrada = fecha_entrada;
         this.fecha_salida = fecha_salida;
-        this.id_huesped = id_huesped;
+        this.dniHuesped = dniHuesped;
         this.numero_habitacion = numero_habitacion;
-       
     }
 
     public static int generarIdReserva() {
@@ -33,7 +32,7 @@ public class Reserva {
 
     public static Reserva buscarReservaPorDNI(int dniHuesped) {
         for (Reserva reserva : reservas) {
-            if (reserva.getId_huesped() == (dniHuesped)) {
+            if (reserva.getDniHuesped() == dniHuesped) {
                 return reserva;
             }
         }
@@ -60,16 +59,16 @@ public class Reserva {
         return fecha_salida;
     }
 
-    public void setFecha_salida(Date fecha_salida) {
+    public void setFecha_salida(LocalDate fecha_salida) {
         this.fecha_salida = fecha_salida;
     }
 
-    public int getId_huesped() {
-        return id_huesped;
+    public int getDniHuesped() {
+        return dniHuesped;
     }
 
-    public void setId_huesped(String nombreHuesped) {
-        this.id_huesped = id_huesped;
+    public void setDniHuesped(int dniHuesped) {
+        this.dniHuesped = dniHuesped;
     }
 
     public int getNumero_habitacion() {
@@ -80,11 +79,9 @@ public class Reserva {
         this.numero_habitacion = numero_habitacion;
     }
 
-  
-
     @Override
     public String toString() {
         return "Reserva [id_reserva=" + id_reserva + ", fecha_entrada=" + fecha_entrada + ", fecha_salida=" + fecha_salida
-                + ", id_huesped=" + id_huesped + ", numero_habitacion=" + numero_habitacion + "]";
+                + ", dniHuesped=" + dniHuesped + ", numero_habitacion=" + numero_habitacion + "]";
     }
 }

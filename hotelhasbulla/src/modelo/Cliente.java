@@ -4,12 +4,13 @@ import javax.swing.JOptionPane;
 import controlador.ClienteControlador;
 
 public class Cliente {
-    private int id_huesped; // ID huesped = DNI 
+    private int id_huesped; 
     private String nombre_huesped;
     private String apellido;
     private String correo;
     private String telefono;
     private String resena;
+    private int DNI;
    
 
 

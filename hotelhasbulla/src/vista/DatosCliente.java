@@ -10,7 +10,7 @@ public class DatosCliente extends JFrame {
     private JTextField txtDNI, txtNombre, txtApellido, txtCorreo, txtTelefono;
     private JButton btnGuardar;
 
-    private String nombreCliente; 
+    private int dniHuesped;
 
     public DatosCliente() {
         initComponents();
@@ -85,15 +85,10 @@ public class DatosCliente extends JFrame {
         ClienteControlador clienteControlador = new ClienteControlador();
         clienteControlador.addCliente(cliente);
 
-      
-        nombreCliente = nombre;
+        dniHuesped = dni;
 
         JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
-
-       
         limpiarCampos();
-
-       
         dispose();
     }
 
@@ -105,8 +100,8 @@ public class DatosCliente extends JFrame {
         txtTelefono.setText("");
     }
 
-    public String getNombreCliente() {
-        return nombreCliente;
+    public int getDniHuesped() {
+        return dniHuesped;
     }
 
     public static void main(String[] args) {
@@ -115,4 +110,6 @@ public class DatosCliente extends JFrame {
             frame.setVisible(true);
         });
     }
+
+	
 }
