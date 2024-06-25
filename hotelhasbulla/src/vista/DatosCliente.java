@@ -10,7 +10,7 @@ public class DatosCliente extends JFrame {
     private JTextField txtDNI, txtNombre, txtApellido, txtCorreo, txtTelefono;
     private JButton btnGuardar;
 
-    private String nombreCliente; 
+    private int dniHuesped;
 
     public DatosCliente() {
         initComponents();
@@ -74,35 +74,23 @@ public class DatosCliente extends JFrame {
     }
 
     private void guardarCliente() {
-        try {
-            if (!isDatosCompletos()) {
-                JOptionPane.showMessageDialog(this, "Debe ingresar todos los datos del cliente.");
-                return;
-            }
+        int dni = Integer.parseInt(txtDNI.getText());
+        String nombre = txtNombre.getText();
+        String apellido = txtApellido.getText();
+        String correo = txtCorreo.getText();
+        String telefono = txtTelefono.getText();
+        String resena = "";
 
-            int dni = Integer.parseInt(txtDNI.getText());
-            String nombre = txtNombre.getText();
-            String apellido = txtApellido.getText();
-            String correo = txtCorreo.getText();
-            String telefono = txtTelefono.getText();
-            String resena = "";
+        Cliente cliente = new Cliente(dni, nombre, apellido, correo, telefono, resena);
+        ClienteControlador clienteControlador = new ClienteControlador();
+        clienteControlador.addCliente(cliente);
 
-            Cliente cliente = new Cliente(dni, nombre, apellido, correo, telefono, resena);
-            ClienteControlador clienteControlador = new ClienteControlador();
-            clienteControlador.addCliente(cliente);
+        dniHuesped = dni;
 
-            nombreCliente = nombre;
-
-            JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
-
-            limpiarCampos();
-
-            dispose();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El DNI debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(this, "Cliente guardado exitosamente.");
+        limpiarCampos();
+        dispose();
     }
-
 
     private void limpiarCampos() {
         txtDNI.setText("");
@@ -112,8 +100,8 @@ public class DatosCliente extends JFrame {
         txtTelefono.setText("");
     }
 
-    public String getNombreCliente() {
-        return nombreCliente;
+    public int getDniHuesped() {
+        return dniHuesped;
     }
 
     public static void main(String[] args) {
@@ -123,17 +111,5 @@ public class DatosCliente extends JFrame {
         });
     }
 
-    public boolean isDatosCompletos() {
-        return !txtDNI.getText().trim().isEmpty() &&
-               !txtNombre.getText().trim().isEmpty() &&
-               !txtApellido.getText().trim().isEmpty() &&
-               !txtCorreo.getText().trim().isEmpty() &&
-               !txtTelefono.getText().trim().isEmpty();
-    }
-
-
-
-    public String getIdHuesped() {
-        return txtDNI.getText();
-    }
+	
 }
