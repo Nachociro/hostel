@@ -52,10 +52,6 @@
 /tablaHabitaciones$4.class
 /TablaReservas$2.class
 /TablaReservas$3.class
-/Main$1.class
-/Main$2.class
-/Main$3.class
-/Main$4.class
 /TablaRecepcionista$1.class
 /TablaRecepcionista$2.class
 /TablaRecepcionista$3.class
@@ -66,6 +62,5 @@
 /InputDNI.class
 /DatosCliente$1.class
 /DatosCliente.class
-/TablaRecepcionista$6.class
-/TablaRecepcionista.class
-/tablaCanchaTenis$5.class
+/TablaReservas$4.class
+/TablaReservas$SeleccionarReservaListener.class

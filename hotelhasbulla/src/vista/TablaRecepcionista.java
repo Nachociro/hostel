@@ -67,7 +67,9 @@ public class TablaRecepcionista extends JFrame {
         contentPane.add(btnCheckIn);
         btnCheckIn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SingletonHabitaciones.getInstance().hacerCheckIn();
+            	dispose();
+                SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
+                singleton.hacerCheckIn();
             }
         });
 
@@ -78,8 +80,10 @@ public class TablaRecepcionista extends JFrame {
         btnCheckOut.setForeground(Color.BLACK);
         contentPane.add(btnCheckOut);
         btnCheckOut.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SingletonHabitaciones.getInstance().hacerCheckOut();
+            public void actionPerformed(ActionEvent e) {               
+                dispose();
+                SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
+                singleton.hacerCheckOut();
             }
         });
         

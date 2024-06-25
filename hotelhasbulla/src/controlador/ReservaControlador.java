@@ -118,25 +118,27 @@ public class ReservaControlador implements ReservaRepository {
         }
     }
 
-    public Reserva buscarReservaPorDNI(int dni) {
-        Reserva reserva = null;
+   
+    public List<Reserva> buscarReservaPorDNI(int dni) {
+        List<Reserva> reservas = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM reserva WHERE dni_huesped = ?");
             statement.setInt(1, dni);
             ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
-                reserva = new Reserva(
+            while (resultSet.next()) {
+                Reserva reserva = new Reserva(
                         resultSet.getInt("id_reserva"),
                         resultSet.getDate("fecha_entrada"),
                         resultSet.getDate("fecha_salida"),
                         resultSet.getInt("dni_huesped"),
                         resultSet.getInt("numero_habitacion")
                 );
+                reservas.add(reserva);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return reserva;
+        return reservas;
     }
 }
