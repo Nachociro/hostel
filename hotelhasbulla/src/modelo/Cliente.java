@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.List;
+
 import javax.swing.JOptionPane;
 import controlador.ClienteControlador;
 
@@ -89,6 +91,10 @@ public class Cliente {
         ClienteControlador clienteControlador = new ClienteControlador();
         clienteControlador.addCliente(cliente);
         return cliente;
+    }
+
+    public int getDni() {
+        return DNI;
     }
 
    

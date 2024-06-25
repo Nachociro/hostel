@@ -121,4 +121,27 @@ public class ClienteControlador implements ClienteRepository {
             e.printStackTrace();
         }
     }
+
+    public Cliente buscarClientePorDni(int dniHuesped) {
+        Cliente cliente = null;
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM cliente WHERE dni = ?")) {
+            statement.setInt(1, dniHuesped);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    cliente = new Cliente(
+                        resultSet.getInt("id_huesped"),
+                        resultSet.getString("nombre_huesped"),
+                        resultSet.getString("apellido"),
+                        resultSet.getString("correo"),
+                        resultSet.getString("telefono"),
+                        resultSet.getString("resena")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cliente;
+    }
+	
 }

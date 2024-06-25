@@ -11,7 +11,7 @@ public class Reserva {
     private int id_reserva;
     private Date fecha_entrada;
     private Date fecha_salida;
-    private int dniHuesped; // Nuevo atributo DNI del huésped
+    private int dniHuesped; 
     private int numero_habitacion;
 
     public Reserva(int id_reserva, Date fecha_entrada, Date fecha_salida, int dniHuesped, int numero_habitacion) {
@@ -59,7 +59,7 @@ public class Reserva {
         return fecha_salida;
     }
 
-    public void setFecha_salida(LocalDate fecha_salida) {
+    public void setFecha_salida(Date fecha_salida) {
         this.fecha_salida = fecha_salida;
     }
 
