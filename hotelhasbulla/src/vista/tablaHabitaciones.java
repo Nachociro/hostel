@@ -11,7 +11,6 @@ import modelo.SingletonHabitaciones;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.util.List;
 
 public class tablaHabitaciones extends JFrame {
@@ -51,20 +50,28 @@ public class tablaHabitaciones extends JFrame {
         JButton btnConfirmar = new JButton("Confirmar");
         btnConfirmar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int filaSeleccionada = tabla.getSelectedRow();
-                if (filaSeleccionada != -1) {
-                    // Obtener la habitación seleccionada
-                    int numeroHabitacion = (int) modeloTabla.getValueAt(filaSeleccionada, 0);
-                    Habitacion habitacionSeleccionada = habitacionControlador.getHabitacionByNumero(numeroHabitacion);
+            	int filaSeleccionada = tabla.getSelectedRow();
+            	if (filaSeleccionada != -1) {
+            	    Object valor = modeloTabla.getValueAt(filaSeleccionada, 0);
+            	    if (valor != null && !valor.toString().isEmpty()) {
+            	        try {
+            	            int numeroHabitacion = Integer.parseInt(valor.toString());
+            	            Habitacion habitacionSeleccionada = habitacionControlador.getHabitacionByNumero(numeroHabitacion);
 
-                    // Asignar la habitación seleccionada al singleton
-                    singleton.setSeleccionada(habitacionSeleccionada);
+            	            // Asignar la habitación seleccionada al singleton
+            	            singleton.setSeleccionada(habitacionSeleccionada);
 
-                    // Cerrar la ventana
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe seleccionar una habitación.");
-                }
+            	            // Cerrar la ventana
+            	            dispose();
+            	        } catch (NumberFormatException ex) {
+            	            JOptionPane.showMessageDialog(null, "Error: El número de habitación seleccionado no es válido.");
+            	        }
+            	    } else {
+            	        JOptionPane.showMessageDialog(null, "Debe seleccionar una habitación válida.");
+            	    }
+            	} else {
+            	    JOptionPane.showMessageDialog(null, "Debe seleccionar una habitación.");
+            	}
             }
         });
         contentPane.add(btnConfirmar, BorderLayout.SOUTH);

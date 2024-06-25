@@ -68,35 +68,36 @@ public class SingletonHabitaciones {
             }
         });
     }
-private void abrirDatosCliente() {
-	 PedirDatosCliente();
-}
 
-    public void PedirDatosCliente() {
-        if (datosCliente == null || !datosCliente.isVisible()) {
+    private void abrirDatosCliente() {
+        pedirDatosCliente();
+    }
+
+    public void pedirDatosCliente() {
+        if (datosCliente == null) {
             datosCliente = new DatosCliente();
-            datosCliente.setVisible(true);
-        } else {
-            datosCliente.requestFocus();
+            datosCliente.setVisible(true);        
+                        finalizarReserva(datosCliente.getIdHuesped());
         }
     }
+                    
 
     public boolean finalizarReserva(String id_huesped) {
         if (habitacionSeleccionada != null && fechaEntrada != null && fechaSalida != null) {
-            if (datosCliente == null || !datosCliente.isVisible()) {
+            if (datosCliente == null) {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese los datos del cliente.");
                 return false;
             }
 
             int idReserva = Reserva.generarIdReserva();
-            String nombreCliente = datosCliente.getNombreCliente(); // Obtener nombre del cliente
+            String nombreCliente = datosCliente.getNombreCliente(); 
 
             Reserva reserva = new Reserva(idReserva, fechaEntrada, fechaSalida, Integer.parseInt(id_huesped),
                     habitacionSeleccionada.getNumero_habitacion(), nombreCliente);
 
             reservaControlador.addReserva(reserva);
 
-            habitacionSeleccionada.setDisponibilidad(false); // Marcar habitación como no disponible
+            habitacionSeleccionada.setDisponibilidad(false); 
 
             JOptionPane.showMessageDialog(null,
                     "Reserva realizada correctamente para habitación número: " + habitacionSeleccionada.getNumero_habitacion()
