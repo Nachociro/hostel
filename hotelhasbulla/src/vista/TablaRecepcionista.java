@@ -5,12 +5,13 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import modelo.SingletonHabitaciones;
-import modelo.Pileta;
 
 public class TablaRecepcionista extends JFrame {
 
@@ -51,7 +52,9 @@ public class TablaRecepcionista extends JFrame {
         contentPane.add(btnReservar);
         btnReservar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SingletonHabitaciones.getInstance().reservarHabitacion();
+                dispose();
+                SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
+                singleton.reservarHabitacion();
             }
         });
 
@@ -87,8 +90,9 @@ public class TablaRecepcionista extends JFrame {
         contentPane.add(btnPileta);
         btnPileta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Pileta pileta = new Pileta();
-                pileta.gestionarPileta();
+                // Ejemplo de cómo gestionar la pileta (aquí deberías implementar la lógica necesaria)
+                // Pileta pileta = new Pileta();
+                // pileta.gestionarPileta();
             }
         });
     }

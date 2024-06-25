@@ -22,7 +22,7 @@ public class Cliente {
         this.resena = resena;
     }
 
-    public int getId_huesped() {
+	public int getId_huesped() {
         return id_huesped;
     }
 

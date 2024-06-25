@@ -2,7 +2,10 @@ package vista;
 
 import com.toedter.calendar.JDateChooser;
 
+import modelo.SingletonHabitaciones;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +15,6 @@ public class calendario extends JFrame {
     private JSpinner hourSpinner;
     private JSpinner minuteSpinner;
     private JDateChooser dateChooser2;
-    private boolean fechasSeleccionadas = false;
 
     public calendario() {
         // Configurar el JFrame
@@ -63,13 +65,32 @@ public class calendario extends JFrame {
             }
         });
 
-        // Crear el botón "Listo"
-        JButton botonListo = new JButton("Listo");
-        botonListo.addActionListener(e -> {
-            fechasSeleccionadas = true;
-            synchronized (this) {
-                this.notify();
-            }
+        // Crear el botón "Confirmar"
+        JButton botonConfirmar = new JButton("Confirmar");
+        botonConfirmar.addActionListener(e -> {
+            Date fecha1 = dateChooser1.getDate();
+            Date fecha2 = dateChooser2.getDate();
+            int hora = (int) hourSpinner.getValue();
+            int minutos = (int) minuteSpinner.getValue();
+
+            // Configurar las fechas y hora seleccionadas
+            Calendar calFecha1 = Calendar.getInstance();
+            calFecha1.setTime(fecha1);
+            calFecha1.set(Calendar.HOUR_OF_DAY, hora);
+            calFecha1.set(Calendar.MINUTE, minutos);
+            Date fechaEntrada = new Date(calFecha1.getTimeInMillis());
+
+            Calendar calFecha2 = Calendar.getInstance();
+            calFecha2.setTime(fecha2);
+            calFecha2.set(Calendar.HOUR_OF_DAY, hora);
+            calFecha2.set(Calendar.MINUTE, minutos);
+            Date fechaSalida = new Date(calFecha2.getTimeInMillis());
+
+            // Actualizar las fechas en el Singleton
+            SingletonHabitaciones.getInstance().setFechas(fechaEntrada, fechaSalida);
+
+            // Cerrar la ventana después de configurar las fechas
+            dispose();
         });
 
         // Agregar componentes al panel
@@ -81,34 +102,22 @@ public class calendario extends JFrame {
         panel.add(minuteSpinner);
         panel.add(new JLabel("Fecha 2:"));
         panel.add(dateChooser2);
-        panel.add(botonListo);
+        panel.add(botonConfirmar);
 
         // Agregar el panel al JFrame
         add(panel);
     }
 
-    public Date getFecha1() {
-        return dateChooser1.getDate();
-    }
-
-    public Date getFecha2() {
-        return dateChooser2.getDate();
-    }
-
-    public int getHora() {
-        return (int) hourSpinner.getValue();
-    }
-
-    public int getMinutos() {
-        return (int) minuteSpinner.getValue();
-    }
-
-    public boolean isFechasSeleccionadas() {
-        return fechasSeleccionadas;
+    public void setFechas(Date fechaEntrada, Date fechaSalida) {
+        dateChooser1.setDate(fechaEntrada);
+        dateChooser2.setDate(fechaSalida);
     }
 
     public static void main(String[] args) {
         // Ejecutar en el hilo de despacho de eventos de Swing
-        SwingUtilities.invokeLater(calendario::new);
+        SwingUtilities.invokeLater(() -> {
+            calendario cal = new calendario();
+            cal.setVisible(true);
+        });
     }
 }

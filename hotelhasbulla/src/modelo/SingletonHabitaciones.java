@@ -1,18 +1,24 @@
 package modelo;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import vista.calendario;
 import vista.tablaHabitaciones;
+import vista.DatosCliente;
 import controlador.HabitacionControlador;
 import controlador.ReservaControlador;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 public class SingletonHabitaciones {
     private static SingletonHabitaciones instance;
     private HabitacionControlador habitacionControlador;
     private ReservaControlador reservaControlador;
-    private Habitacion seleccionada;
+    private Habitacion habitacionSeleccionada;
+    private java.util.Date fechaEntrada;
+    private java.util.Date fechaSalida;
+    private boolean fechasSeleccionadas;
+    private DatosCliente datosCliente; // Mantener referencia a DatosCliente
 
     private SingletonHabitaciones() {
         habitacionControlador = new HabitacionControlador();
@@ -26,108 +32,119 @@ public class SingletonHabitaciones {
         return instance;
     }
 
-    public boolean reservarHabitacion() {
-        try {
-            calendario cal = new calendario();
-            cal.setVisible(true);
+    public void setFechas(java.util.Date fechaEntrada, java.util.Date fechaSalida) {
+        this.fechaEntrada = fechaEntrada;
+        this.fechaSalida = fechaSalida;
+        this.fechasSeleccionadas = true;
+    }
 
-            // Esperar hasta que se seleccionen las fechas en el calendario
-            synchronized (cal) {
-                while (!cal.isFechasSeleccionadas()) {
-                    try {
-                        cal.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    public void setSeleccionada(Habitacion habitacion) {
+        this.habitacionSeleccionada = habitacion;
+    }
+
+    public void reservarHabitacion() {
+        calendario cal = new calendario();
+        cal.setVisible(true);
+
+        cal.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                if (fechasSeleccionadas) {
+                    abrirTablaHabitaciones();
                 }
             }
+        });
+    }
 
-            // Obtener las fechas después de que el usuario las ha seleccionado
-            Date fechaEntrada = (Date) cal.getFecha1();
-            Date fechaSalida = (Date) cal.getFecha2();
+    private void abrirTablaHabitaciones() {
+        tablaHabitaciones tab = new tablaHabitaciones(this);
+        tab.setVisible(true);
+        tab.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                if (habitacionSeleccionada != null) {
+                    abrirDatosCliente();
+                }
+            }
+        });
+    }
+private void abrirDatosCliente() {
+	 PedirDatosCliente();
+}
 
-            // Verificar que las fechas no sean nulas
-            if (fechaEntrada == null || fechaSalida == null) {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar ambas fechas.");
+    public void PedirDatosCliente() {
+        if (datosCliente == null || !datosCliente.isVisible()) {
+            datosCliente = new DatosCliente();
+            datosCliente.setVisible(true);
+        } else {
+            datosCliente.requestFocus();
+        }
+    }
+
+    public boolean finalizarReserva(String id_huesped) {
+        if (habitacionSeleccionada != null && fechaEntrada != null && fechaSalida != null) {
+            if (datosCliente == null || !datosCliente.isVisible()) {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese los datos del cliente.");
                 return false;
             }
 
-            if (fechaEntrada.after(fechaSalida)) {
-                JOptionPane.showMessageDialog(null, "La fecha de entrada debe ser anterior a la fecha de salida.");
-                return false;
-            }
+            int idReserva = Reserva.generarIdReserva();
+            String nombreCliente = datosCliente.getNombreCliente(); // Obtener nombre del cliente
 
-            tablaHabitaciones frame = new tablaHabitaciones(fechaEntrada, fechaSalida, this);
-            frame.setVisible(true);
+            Reserva reserva = new Reserva(idReserva, fechaEntrada, fechaSalida, Integer.parseInt(id_huesped),
+                    habitacionSeleccionada.getNumero_habitacion(), nombreCliente);
 
-            // Verificar disponibilidad y limpieza de la habitación seleccionada
-            if (!seleccionada.isDisponibilidad() || seleccionada.isLimpieza()) {
-                mostrarMensajeHabitacionNoDisponible(seleccionada.getNumero_habitacion());
-                return false;
-            }
+            reservaControlador.addReserva(reserva);
 
-            // Pedir datos del cliente
-            Cliente cliente = Cliente.pedirDatosCliente();
+            habitacionSeleccionada.setDisponibilidad(false); // Marcar habitación como no disponible
 
-            // Marcar la habitación como no disponible
-            seleccionada.setDisponibilidad(false);
-            habitacionControlador.updateHabitacion(seleccionada);
+            JOptionPane.showMessageDialog(null,
+                    "Reserva realizada correctamente para habitación número: " + habitacionSeleccionada.getNumero_habitacion()
+                            + "\nDNI del huésped: " + id_huesped);
 
-            // Crear nueva reserva y agregarla al controlador de reservas
-            Reserva nuevaReserva = new Reserva(Reserva.generarIdReserva(), fechaEntrada, fechaSalida, cliente.getId_huesped(), seleccionada.getNumero_habitacion(), cliente.getNombre_huesped());
-            reservaControlador.addReserva(nuevaReserva);
-
-            // Mostrar confirmación de reserva
-            mostrarConfirmacionReserva(nuevaReserva.getId_reserva(), seleccionada.getNumero_habitacion(), cliente.getNombre_huesped(), fechaEntrada, fechaSalida);
             return true;
-        } catch (Exception e) {
-            mostrarError(e.getMessage());
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Error al finalizar la reserva. Seleccione una habitación y fechas válidas.");
             return false;
         }
     }
 
-    public void setSeleccionada(Habitacion habitacion) {
-        this.seleccionada = habitacion;
-    }
-
-    private void mostrarMensajeHabitacionNoDisponible(int numeroHabitacion) {
-        JOptionPane.showMessageDialog(null, "La habitación con número " + numeroHabitacion + " no está disponible para reservar.");
-    }
-
-    private void mostrarConfirmacionReserva(int id_reserva, int numeroHabitacion, String nombreCliente, Date fechaEntrada, Date fechaSalida) {
-        JOptionPane.showMessageDialog(null, "Se hizo la reserva número: " + id_reserva + "\nPara la habitación " + numeroHabitacion + "\nReservada a nombre de " + nombreCliente + "\nPara la fecha de " + fechaEntrada + "\nHasta la fecha de " + fechaSalida);
-    }
-
-    private void mostrarError(String mensajeError) {
-        JOptionPane.showMessageDialog(null, "Error al reservar la habitación: " + mensajeError);
+    public List<Habitacion> getHabitacionesDisponibles() {
+        return habitacionControlador.getHabitacionesDisponibles();
     }
 
     public void hacerCheckIn() {
         String opcion;
         do {
-            String[] opciones = {"Ingresar DNI", "Salir"};
-            opcion = (String) JOptionPane.showInputDialog(null, "Menú de Check-In", "Opciones", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+            String[] opciones = { "Ingresar DNI", "Salir" };
+            opcion = (String) JOptionPane.showInputDialog(null, "Menú de Check-In", "Opciones",
+                    JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
 
             switch (opcion) {
                 case "Ingresar DNI":
                     String dniReserva = JOptionPane.showInputDialog("Ingrese el DNI del huésped:");
                     Reserva reserva = buscarReservaPorDNI(Integer.parseInt(dniReserva));
                     if (reserva != null) {
-                        if (((Date) reserva.getFecha_entrada()).toLocalDate().isEqual(LocalDate.now())) {
+                        LocalDate fechaReserva = ((Date) reserva.getFecha_entrada()).toLocalDate();
+                        if (fechaReserva.isEqual(LocalDate.now())) {
                             realizarCheckIn(reserva);
                             JOptionPane.showMessageDialog(null, "Check-In realizado con éxito.");
                         } else {
-                            JOptionPane.showMessageDialog(null, "La fecha de ingreso no coincide con la fecha actual.");
+                            JOptionPane.showMessageDialog(null,
+                                    "La fecha de ingreso no coincide con la fecha actual.");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró ninguna reserva asociada al DNI ingresado.");
+                        JOptionPane.showMessageDialog(null,
+                                "No se encontró ninguna reserva asociada al DNI ingresado.");
                     }
                     break;
                 case "Salir":
                     JOptionPane.showMessageDialog(null, "Saliendo del Menú de Check-In.");
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Opción no válida. Por favor, seleccione una opción válida.");
+                    JOptionPane.showMessageDialog(null,
+                            "Opción no válida. Por favor, seleccione una opción válida.");
                     break;
             }
         } while (!opcion.equals("Salir"));
@@ -156,10 +173,12 @@ public class SingletonHabitaciones {
                         LocalDate fechaSalida = ((Date) reserva.getFecha_salida()).toLocalDate();
                         LocalDate fechaActual = LocalDate.now();
                         if (fechaSalida.isBefore(fechaActual)) {
-                            JOptionPane.showMessageDialog(null, "La fecha de salida es anterior a la fecha actual. Debe pagar el costo total.");
-                            String[] opciones = {"Salir igualmente", "Quedarse"};
+                            JOptionPane.showMessageDialog(null,
+                                    "La fecha de salida es anterior a la fecha actual. Debe pagar el costo total.");
+                            String[] opciones = { "Salir igualmente", "Quedarse" };
                             int seleccion = JOptionPane.showOptionDialog(null, "¿Qué desea hacer?", "Confirmación",
-                                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+                                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones,
+                                    opciones[0]);
                             if (seleccion == 0) {
                                 realizarCheckOut(reserva);
                                 JOptionPane.showMessageDialog(null, "Check-Out realizado con éxito.");
@@ -167,7 +186,8 @@ public class SingletonHabitaciones {
                                 JOptionPane.showMessageDialog(null, "Que disfrute los días que le quedan");
                             }
                         } else if (fechaSalida.isAfter(fechaActual)) {
-                            JOptionPane.showMessageDialog(null, "La fecha de salida es posterior a la fecha actual. Se cobrará un extra.");
+                            JOptionPane.showMessageDialog(null,
+                                    "La fecha de salida es posterior a la fecha actual. Se cobrará un extra.");
                             realizarCheckOut(reserva);
                             JOptionPane.showMessageDialog(null, "Check-Out realizado con éxito.");
                         } else {
@@ -175,14 +195,16 @@ public class SingletonHabitaciones {
                             JOptionPane.showMessageDialog(null, "Check-Out realizado con éxito.");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se encontró ninguna reserva asociada al DNI ingresado.");
+                        JOptionPane.showMessageDialog(null,
+                                "No se encontró ninguna reserva asociada al DNI ingresado.");
                     }
                     break;
                 case "2":
                     JOptionPane.showMessageDialog(null, "Saliendo del Menú de Check-Out.");
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Opción no válida. Por favor, seleccione una opción válida.");
+                    JOptionPane.showMessageDialog(null,
+                            "Opción no válida. Por favor, seleccione una opción válida.");
                     break;
             }
         } while (!opcion.equals("2"));
@@ -200,14 +222,15 @@ public class SingletonHabitaciones {
     }
 
     public void tipoLimpieza() {
-        // TODO Auto-generated method stub
+        // Implementar lógica de tipos de limpieza
     }
 
     public void LimpiezaHabitacion1() {
-        // TODO Auto-generated method stub
+        // Implementar lógica de limpieza de habitación 1
     }
 
     public void LimpiezaHabitacion() {
-        // TODO Auto-generated method stub
+        // Implementar lógica de limpieza de habitación
     }
 }
+

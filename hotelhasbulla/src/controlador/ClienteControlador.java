@@ -20,7 +20,7 @@ public class ClienteControlador implements ClienteRepository {
     public void addCliente(Cliente cliente) {
         try {
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO clientes (nombre_huesped, apellido, correo, telefono, resena) VALUES (?, ?, ?, ?, ?)"
+                "INSERT INTO cliente (nombre_huesped, apellido, correo, telefono, resena) VALUES (?, ?, ?, ?, ?)"
             );
             statement.setString(1, cliente.getNombre_huesped());
             statement.setString(2, cliente.getApellido());
@@ -41,7 +41,7 @@ public class ClienteControlador implements ClienteRepository {
     public Cliente getClienteById(int id) {
         Cliente cliente = null;
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM clientes WHERE id_huesped = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM cliente WHERE id_huesped = ?");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
@@ -65,7 +65,7 @@ public class ClienteControlador implements ClienteRepository {
     public List<Cliente> getAllClientes() {
         List<Cliente> clientes = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM clientes");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM cliente");
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -89,7 +89,7 @@ public class ClienteControlador implements ClienteRepository {
     public void updateCliente(Cliente cliente) {
         try {
             PreparedStatement statement = connection.prepareStatement(
-                "UPDATE clientes SET nombre_huesped = ?, apellido = ?, correo = ?, telefono = ?, resena = ? WHERE id_huesped = ?"
+                "UPDATE cliente SET nombre_huesped = ?, apellido = ?, correo = ?, telefono = ?, resena = ? WHERE id_huesped = ?"
             );
             statement.setString(1, cliente.getNombre_huesped());
             statement.setString(2, cliente.getApellido());
@@ -110,7 +110,7 @@ public class ClienteControlador implements ClienteRepository {
     @Override
     public void deleteCliente(int id) {
         try {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM clientes WHERE id_huesped = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM cliente WHERE id_huesped = ?");
             statement.setInt(1, id);
 
             int rowsDeleted = statement.executeUpdate();
@@ -122,4 +122,3 @@ public class ClienteControlador implements ClienteRepository {
         }
     }
 }
-

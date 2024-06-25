@@ -24,8 +24,7 @@ public class Main {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    frameActual.dispose(); // Cerrar la ventana actual
-                    // Implementar lógica para mostrar el menú de administrador
+                    frameActual.dispose(); 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -37,8 +36,7 @@ public class Main {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    frameActual.dispose(); // Cerrar la ventana actual
-                    // Implementar lógica para mostrar el menú de limpieza
+                    frameActual.dispose(); 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
