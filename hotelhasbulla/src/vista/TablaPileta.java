@@ -1,27 +1,22 @@
 package vista;
 
-
-import java.awt.EventQueue;
-import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-
-import modelo.Pileta;
-import controlador.PiletaControlador;
-
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
+import controlador.PiletaControlador;
+import modelo.Pileta;
+
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import javax.swing.JMenuBar;
+import java.awt.Font;
 
 public class TablaPileta extends JFrame {
 
@@ -31,13 +26,8 @@ public class TablaPileta extends JFrame {
     private DefaultTableModel model;
     private PiletaControlador controlador;
     private JLabel elemento;
-    private Pileta seleccionada;
-    private JButton ingresarButton;
-    private JButton retirarButton;
+    private Pileta pileta; // La única pileta
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -51,96 +41,84 @@ public class TablaPileta extends JFrame {
         });
     }
 
-    /**
-     * Create the frame.
-     */
     public TablaPileta() {
         this.setVisible(true);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 909, 452);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
         setContentPane(contentPane);
+        contentPane.setLayout(null);
 
-        // Inicializar controlador y pileta seleccionada
+        // Inicializar controlador y obtener la única pileta
         controlador = new PiletaControlador();
-        seleccionada = controlador.getPileta(); // Obtener la única pileta
+        pileta = controlador.getPileta(); // Obtener la única pileta
 
+        // Crear el JLabel para mostrar la selección
+        elemento = new JLabel("Pileta:");
+        elemento.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        elemento.setBounds(507, 24, 365, 39);
+        contentPane.add(elemento);
+        
         // Crear la tabla y el modelo
         String[] columnNames = {"Capacidad Máxima", "Capacidad Actual", "Llena"};
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         actualizarTabla();
-        contentPane.setLayout(null);
-
-        // Crear el JScrollPane y agregar la tabla
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(5, 19, 900, 190);
+        scrollPane.setBounds(0, 0, 452, 427);
         contentPane.add(scrollPane);
 
-        // Crear el JLabel para mostrar la selección
-        elemento = new JLabel("Seleccionado:");
-        elemento.setBounds(5, 5, 900, 14);
-        contentPane.add(elemento);
-
-        ingresarButton = new JButton("Ingresar Personas");
+        // Botón para ingresar personas
+        JButton ingresarButton = new JButton("Ingresar Personas");
         ingresarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                seleccionada.ingresarPersonas();
+                pileta.ingresarPersonas();
                 actualizarTabla();
+                controlador.actualizarCantidadPersonas(pileta); // Actualizar cantidad de personas en la base de datos
             }
         });
-        ingresarButton.setBounds(253, 280, 187, 58);
+        ingresarButton.setBounds(474, 141, 166, 61);
         contentPane.add(ingresarButton);
 
-        retirarButton = new JButton("Retirar Personas");
+        // Botón para retirar personas
+        JButton retirarButton = new JButton("Retirar Personas");
         retirarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                seleccionada.retirarPersonas();
+                pileta.retirarPersonas();
                 actualizarTabla();
+                controlador.actualizarCantidadPersonas(pileta); // Actualizar cantidad de personas en la base de datos
             }
         });
-        retirarButton.setBounds(453, 280, 187, 58);
+        retirarButton.setBounds(717, 141, 166, 61);
         contentPane.add(retirarButton);
 
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(15, 220, 101, 22);
-        contentPane.add(menuBar);
-
-        // Configurar el modelo de selección
-        ListSelectionModel selectionModel = table.getSelectionModel();
-        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        // Agregar un escuchador de selección
-        selectionModel.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    int selectedRow = table.getSelectedRow();
-                    if (selectedRow != -1) {
-                        int capacidadMaxima = 50; // Capacidad máxima siempre es 50
-                        int capacidadActual = (int) table.getValueAt(selectedRow, 1);
-                        boolean llena = (boolean) table.getValueAt(selectedRow, 2);
-                        elemento.setText("Seleccionado: Capacidad Máxima=" + capacidadMaxima + ", Capacidad Actual=" + capacidadActual);
-                    }
-                }
+        // Botón para salir del programa
+        JButton salirButton = new JButton("Salir");
+        salirButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Aquí no es necesario guardar ningún estado, simplemente se cierra la aplicación
+                System.exit(0);
             }
         });
+        salirButton.setBounds(605, 245, 166, 61);
+        contentPane.add(salirButton);
+
+        // Configurar el modelo de selección (solo permite una fila a la vez)
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // No se necesita escuchador de selección en este caso, dado que solo hay una pileta
     }
 
+    // Método para actualizar la tabla con los datos de la pileta
     private void actualizarTabla() {
         // Limpiar el modelo de la tabla
         model.setRowCount(0);
 
-        // Agregar los datos al modelo
-        model.addRow(
-            new Object[] {
-                50, // Capacidad máxima siempre es 50
-                seleccionada.getCantidadPersonas(),
-                seleccionada.getCantidadPersonas() >= 50
-            }
-        );
+        // Agregar los datos de la pileta al modelo
+        model.addRow(new Object[]{50, pileta.getCantidadPersonas(), pileta.getCantidadPersonas() >= 50});
+
+        // Actualizar el JLabel con la información de la pileta
+        elemento.setText("Pileta: Capacidad Máxima=50, Capacidad Actual=" + pileta.getCantidadPersonas());
     }
 }

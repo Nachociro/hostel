@@ -1,6 +1,7 @@
 package controlador;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,123 +11,62 @@ import java.util.List;
 import modelo.CanchaFutbol;
 
 public class CanchaFutbolControlador {
-    private final Connection connection;
-
-    public CanchaFutbolControlador() {
-        this.connection = DatabaseConnection.getInstance().getConnection();
-    }
+    private static final String URL = "jdbc:mysql://localhost:3306/hostel";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
 
     public List<CanchaFutbol> getAllCanchas() {
         List<CanchaFutbol> canchas = new ArrayList<>();
-        String query = "SELECT * FROM CanchaFutbol";
-        try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-             
-            while (resultSet.next()) {
-                CanchaFutbol cancha = new CanchaFutbol(
-                        resultSet.getInt("id_futbol"),
-                        resultSet.getInt("tamano"),
-                        resultSet.getDouble("precio"),
-                        resultSet.getBoolean("disponible")
-                );
-                canchas.add(cancha);
+
+        String sql = "SELECT * FROM cancha_futbol";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id_futbol");
+                int tamano = rs.getInt("tamano");
+                double precio = rs.getDouble("precio");
+                boolean disponible = rs.getBoolean("disponible");
+                canchas.add(new CanchaFutbol(id, tamano, precio, disponible));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return canchas;
     }
 
-    public CanchaFutbol getCanchaById(int id) {
-        CanchaFutbol cancha = null;
-        String query = "SELECT * FROM CanchaFutbol WHERE id_futbol = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    cancha = new CanchaFutbol(
-                            resultSet.getInt("id_futbol"),
-                            resultSet.getInt("tamano"),
-                            resultSet.getDouble("precio"),
-                            resultSet.getBoolean("disponible")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cancha;
-    }
-
-    public void addCancha(CanchaFutbol cancha) {
-        String query = "INSERT INTO CanchaFutbol (tamano, precio, disponible) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, cancha.getTamano());
-            statement.setDouble(2, cancha.getPrecio());
-            statement.setBoolean(3, cancha.isDisponible());
-            
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("Cancha de fútbol insertada exitosamente");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateCancha(CanchaFutbol cancha) {
-        String query = "UPDATE CanchaFutbol SET tamano = ?, precio = ?, disponible = ? WHERE id_futbol = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, cancha.getTamano());
-            statement.setDouble(2, cancha.getPrecio());
-            statement.setBoolean(3, cancha.isDisponible());
-            statement.setInt(4, cancha.getId_futbol());
-            
-            int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
-                System.out.println("Cancha de fútbol actualizada exitosamente");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteCancha(int id) {
-        String query = "DELETE FROM CanchaFutbol WHERE id_futbol = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
-            
-            int rowsDeleted = statement.executeUpdate();
-            if (rowsDeleted > 0) {
-                System.out.println("Cancha de fútbol eliminada exitosamente");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void reservarCancha(int id, int numPersonas) {
-        CanchaFutbol cancha = getCanchaById(id);
-        if (cancha != null && cancha.isDisponible()) {
+        String sql = "UPDATE cancha_futbol SET disponible = false, precio = ? WHERE id_futbol = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            double precio = 100.0;
             if (numPersonas >= 8) {
-                cancha.setPrecio(cancha.getPrecio() * 0.75);
+                precio *= 0.75;
             }
-            cancha.setDisponible(false);
-            updateCancha(cancha);
-            System.out.println("Cancha " + id + " reservada con éxito. Precio final: " + cancha.getPrecio());
-        } else {
-            System.out.println("Cancha " + id + " no está disponible para reservar.");
+
+            stmt.setDouble(1, precio);
+            stmt.setInt(2, id);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public void cancelarReserva(int id) {
-        CanchaFutbol cancha = getCanchaById(id);
-        if (cancha != null && !cancha.isDisponible()) {
-            cancha.setDisponible(true);
-            updateCancha(cancha);
-            System.out.println("Reserva de la cancha " + id + " cancelada con éxito.");
-        } else {
-            System.out.println("La cancha " + id + " no está reservada.");
+        String sql = "UPDATE cancha_futbol SET disponible = true WHERE id_futbol = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

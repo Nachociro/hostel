@@ -3,39 +3,51 @@ package modelo;
 import javax.swing.JOptionPane;
 
 public class Pileta {
+    private int capacidadMaxima;
     private int cantidadPersonas;
 
-    public Pileta() {
-        this.cantidadPersonas = 0;
+    public Pileta(int capacidadMaxima, int cantidadPersonas) {
+        this.capacidadMaxima = capacidadMaxima;
+        this.cantidadPersonas = cantidadPersonas;
     }
 
     public void ingresarPersonas() {
-        if (cantidadPersonas < 50) {
-            int personas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de personas a ingresar a la pileta:"));
-            if (personas > 0) {
-                if (cantidadPersonas + personas <= 50) {
-                    cantidadPersonas += personas;
-                    JOptionPane.showMessageDialog(null, "Se han ingresado " + personas + " personas a la pileta.\n Total: " + cantidadPersonas);
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se pueden ingresar más personas, la pileta está llena.");
-                }
-            } else {
+        int personas;
+        try {
+            personas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de personas a ingresar a la pileta:"));
+            if (personas <= 0) {
                 JOptionPane.showMessageDialog(null, "La cantidad de personas a ingresar debe ser mayor que 0.");
+                return;
             }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Ingrese un número válido para la cantidad de personas.");
+            return;
+        }
+
+        if (cantidadPersonas + personas <= capacidadMaxima) {
+            cantidadPersonas += personas;
+            JOptionPane.showMessageDialog(null, "Se han ingresado " + personas + " personas a la pileta.\nTotal: " + cantidadPersonas);
         } else {
-            JOptionPane.showMessageDialog(null, "La pileta ya está llena, no se pueden ingresar más personas.");
+            JOptionPane.showMessageDialog(null, "No se pueden ingresar más personas, la pileta está llena.");
         }
     }
 
     public void retirarPersonas() {
         if (cantidadPersonas > 0) {
-            int personas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de personas a retirar de la pileta:"));
-            if (personas > 0 && personas <= cantidadPersonas) {
-                cantidadPersonas -= personas;
-                JOptionPane.showMessageDialog(null, "Se han retirado " + personas + " personas de la pileta. Total: " + cantidadPersonas);
-            } else {
-                JOptionPane.showMessageDialog(null, "La cantidad de personas a retirar debe ser mayor que 0 y menor o igual al número actual de personas en la pileta.");
+            int personas;
+            try {
+                personas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de personas a retirar de la pileta:"));
+                if (personas <= 0 || personas > cantidadPersonas) {
+                    JOptionPane.showMessageDialog(null, "La cantidad de personas a retirar debe ser mayor que 0 y menor o igual al número actual de personas en la pileta.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Ingrese un número válido para la cantidad de personas.");
+                return;
             }
+
+            cantidadPersonas -= personas;
+            JOptionPane.showMessageDialog(null, "Se han retirado " + personas + " personas de la pileta.\nTotal: " + cantidadPersonas);
         } else {
             JOptionPane.showMessageDialog(null, "No hay personas en la pileta para retirar.");
         }
@@ -45,8 +57,7 @@ public class Pileta {
         return cantidadPersonas;
     }
 
-    public static void gestionarPileta() {
-        Pileta pileta = new Pileta();
+    public static void gestionarPileta(Pileta pileta) {
         int opcion;
         do {
             opcion = mostrarMenuPileta();
@@ -64,7 +75,7 @@ public class Pileta {
         } while (opcion != 3);
     }
 
-    public static int mostrarMenuPileta() {
+    private static int mostrarMenuPileta() {
         String[] opciones = {"Ingresar personas a la pileta", "Retirar personas de la pileta", "Salir"};
         int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una acción:", "Gestión de Pileta", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
         return seleccion + 1;

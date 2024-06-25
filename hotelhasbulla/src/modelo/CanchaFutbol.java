@@ -18,24 +18,31 @@ public class CanchaFutbol {
     public int getId_futbol() {
         return id_futbol;
     }
+
     public void setId_futbol(int id_futbol) {
         this.id_futbol = id_futbol;
     }
+
     public int getTamano() {
         return tamano;
     }
+
     public void setTamano(int tamano) {
         this.tamano = tamano;
     }
+
     public double getPrecio() {
         return precio;
     }
+
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+
     public boolean isDisponible() {
         return disponible;
     }
+
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
     }
@@ -48,7 +55,7 @@ public class CanchaFutbol {
     public void reservarCancha(int numPersonas) {
         if (disponible) {
             if (numPersonas >= 8) {
-                precio = precio * 0.75; // Aplicar 25% de descuento
+                precio *= 0.75;
             }
             disponible = false;
             System.out.println("Cancha " + id_futbol + " reservada con éxito. Precio final: " + precio);
@@ -57,14 +64,6 @@ public class CanchaFutbol {
         }
     }
 
-    public void cancelarReserva() {
-        if (!disponible) {
-            disponible = true;
-            System.out.println("Reserva de la cancha " + id_futbol + " cancelada con éxito.");
-        } else {
-            System.out.println("La cancha " + id_futbol + " no está reservada.");
-        }
-    }
 
     public static void reservarCancha(CanchaFutbol[] canchas) {
         String canchaNum = JOptionPane.showInputDialog("Ingrese el número de la cancha a reservar:");
@@ -85,6 +84,16 @@ public class CanchaFutbol {
         }
     }
 
+    public void cancelarReserva() {
+        if (disponible) {
+            System.out.println("La cancha " + id_futbol + " no está reservada.");
+        } else {
+            disponible = true;
+            System.out.println("Reserva de la cancha " + id_futbol + " cancelada con éxito.");
+        }
+    }
+
+   
     public static void cancelarReserva(CanchaFutbol[] canchas) {
         String canchaNum = JOptionPane.showInputDialog("Ingrese el número de la cancha a cancelar la reserva:");
         int num = Integer.parseInt(canchaNum);
@@ -100,5 +109,34 @@ public class CanchaFutbol {
         if (!canchaEncontrada) {
             JOptionPane.showMessageDialog(null, "Cancha no encontrada.");
         }
+    }
+
+    public static void gestionCanchaFutbol(CanchaFutbol[] canchas) {
+        int opcion;
+        do {
+            opcion = mostrarMenuCancha();
+            switch (opcion) {
+                case 1:
+                    reservarCancha(canchas);
+                    break;
+                case 2:
+                    cancelarReserva(canchas);
+                    break;
+                case 3:
+                    JOptionPane.showMessageDialog(null, "Saliendo del programa");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Opción no válida. Por favor, seleccione una opción válida.");
+                    break;
+            }
+        } while (opcion != 3);
+    }
+
+    public static int mostrarMenuCancha() {
+        String[] opciones = {"Hacer reserva de cancha", "Cancelar reserva de cancha", "Salir"};
+        int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una acción para la cancha:",
+                "Gestión de Cancha de Fútbol", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, opciones, opciones[0]);
+        return seleccion + 1;
     }
 }

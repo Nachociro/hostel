@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import modelo.SingletonHabitaciones;
+import modelo.SelectorCanchas;
 
 public class TablaRecepcionista extends JFrame {
 
@@ -81,18 +82,23 @@ public class TablaRecepcionista extends JFrame {
                 SingletonHabitaciones.getInstance().hacerCheckOut();
             }
         });
-
-        JButton btnPileta = new JButton("Pileta");
-        btnPileta.setBounds(50, 200, 300, 40);
-        btnPileta.setFont(buttonFont);
-        btnPileta.setBackground(Color.RED);
-        btnPileta.setForeground(Color.BLACK);
-        contentPane.add(btnPileta);
-        btnPileta.addActionListener(new ActionListener() {
+        
+        JButton btnGestionarPileta = new JButton("Gestionar Pileta");
+        btnGestionarPileta.setBounds(50, 200, 200, 30);
+        contentPane.add(btnGestionarPileta);
+        btnGestionarPileta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Ejemplo de cómo gestionar la pileta (aquí deberías implementar la lógica necesaria)
-                // Pileta pileta = new Pileta();
-                // pileta.gestionarPileta();
+                TablaPileta tablaPileta = new TablaPileta();
+                tablaPileta.setVisible(true);
+            }
+        });
+
+        JButton btnGestionarCanchas = new JButton("Gestionar Canchas");
+        btnGestionarCanchas.setBounds(50, 250, 200, 30);
+        contentPane.add(btnGestionarCanchas);
+        btnGestionarCanchas.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SelectorCanchas.elegirDeporte();
             }
         });
     }
