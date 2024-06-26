@@ -199,12 +199,12 @@ public class SingletonHabitaciones {
                                 "Quedarse");
                         
                         if (opcion == JOptionPane.YES_OPTION) {
-                            // El usuario decide quedarse, no se realiza el Check-Out
+                            
                             return;
                         }
                     }
 
-                    // Realizar el Check-Out
+                   
                     realizarCheckOut(reserva, habitacion);
                 } else {
                     JOptionPane.showMessageDialog(null,
