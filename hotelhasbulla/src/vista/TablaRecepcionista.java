@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -42,14 +41,18 @@ public class TablaRecepcionista extends JFrame {
         contentPane.setLayout(null);
 
         // Fuente para los botones
-        Font buttonFont = new Font("Mandalore", Font.PLAIN, 20);
+        Font buttonFont = new Font("Star Jedi", Font.PLAIN, 20);
+
+        // Tamaño uniforme para los botones
+        int buttonWidth = 300;
+        int buttonHeight = 40;
 
         // Crear y agregar botones con los mismos estilos
         JButton btnReservar = new JButton("Reservar Habitación");
-        btnReservar.setBounds(50, 50, 300, 40);
+        btnReservar.setBounds(50, 50, buttonWidth, buttonHeight);
         btnReservar.setFont(buttonFont);
-        btnReservar.setBackground(Color.RED); // Fondo rojo
-        btnReservar.setForeground(Color.BLACK); // Texto negro
+        btnReservar.setBackground(new Color(169, 169, 169)); // Fondo gris
+        btnReservar.setForeground(Color.RED); // Texto rojo
         contentPane.add(btnReservar);
         btnReservar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -60,35 +63,38 @@ public class TablaRecepcionista extends JFrame {
         });
 
         JButton btnCheckIn = new JButton("Hacer Check-in");
-        btnCheckIn.setBounds(50, 100, 300, 40);
+        btnCheckIn.setBounds(50, 100, buttonWidth, buttonHeight);
         btnCheckIn.setFont(buttonFont);
-        btnCheckIn.setBackground(Color.RED);
-        btnCheckIn.setForeground(Color.BLACK);
+        btnCheckIn.setBackground(new Color(169, 169, 169)); // Fondo gris
+        btnCheckIn.setForeground(Color.RED); // Texto rojo
         contentPane.add(btnCheckIn);
         btnCheckIn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	dispose();
+                dispose();
                 SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
                 singleton.hacerCheckIn();
             }
         });
 
         JButton btnCheckOut = new JButton("Hacer Check-out");
-        btnCheckOut.setBounds(50, 150, 300, 40);
+        btnCheckOut.setBounds(50, 150, buttonWidth, buttonHeight);
         btnCheckOut.setFont(buttonFont);
-        btnCheckOut.setBackground(Color.RED);
-        btnCheckOut.setForeground(Color.BLACK);
+        btnCheckOut.setBackground(new Color(169, 169, 169)); // Fondo gris
+        btnCheckOut.setForeground(Color.RED); // Texto rojo
         contentPane.add(btnCheckOut);
         btnCheckOut.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {               
+            public void actionPerformed(ActionEvent e) {
                 dispose();
                 SingletonHabitaciones singleton = SingletonHabitaciones.getInstance();
                 singleton.hacerCheckOut();
             }
         });
-        
+
         JButton btnGestionarPileta = new JButton("Gestionar Pileta");
-        btnGestionarPileta.setBounds(50, 200, 200, 30);
+        btnGestionarPileta.setBounds(50, 200, buttonWidth, buttonHeight);
+        btnGestionarPileta.setFont(buttonFont);
+        btnGestionarPileta.setBackground(new Color(169, 169, 169)); // Fondo gris
+        btnGestionarPileta.setForeground(Color.RED); // Texto rojo
         contentPane.add(btnGestionarPileta);
         btnGestionarPileta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +104,10 @@ public class TablaRecepcionista extends JFrame {
         });
 
         JButton btnGestionarCanchas = new JButton("Gestionar Canchas");
-        btnGestionarCanchas.setBounds(50, 250, 200, 30);
+        btnGestionarCanchas.setBounds(50, 250, buttonWidth, buttonHeight);
+        btnGestionarCanchas.setFont(buttonFont);
+        btnGestionarCanchas.setBackground(new Color(169, 169, 169)); // Fondo gris
+        btnGestionarCanchas.setForeground(Color.RED); // Texto rojo
         contentPane.add(btnGestionarCanchas);
         btnGestionarCanchas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
