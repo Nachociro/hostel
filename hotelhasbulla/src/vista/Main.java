@@ -20,16 +20,10 @@ public class Main {
         });
     }
 
-    public static void mostrarMenuAdmin(JFrame frameActual) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    frameActual.dispose(); 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public static void mostrarMenuAdmin(JFrame parent) {
+        TablaAdmin tablaAdmin = new TablaAdmin();
+        tablaAdmin.setVisible(true);
+        parent.dispose(); 
     }
 
     public static void mostrarMenuLimpieza(JFrame frameActual) {
