@@ -40,7 +40,7 @@ public class CanchaFutbolControlador {
         return canchas;
     }
     
-    private boolean estaCanchaDisponible(int id) {
+    public boolean estaCanchaDisponible(int id) {
         String sql = "SELECT disponible FROM cancha_futbol WHERE id_futbol = ?";
         boolean disponible = false;
 
@@ -95,7 +95,7 @@ public class CanchaFutbolControlador {
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        	JOptionPane.showMessageDialog(null, "Reserva cancelada con éxito");
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {

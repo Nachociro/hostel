@@ -1,6 +1,8 @@
 package vista;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JMenuBar;
 
 public class tablaCanchaTenis extends JFrame {
 
@@ -31,7 +32,7 @@ public class tablaCanchaTenis extends JFrame {
     private CanchaTenisControlador controlador;
     private JLabel elemento;
     private JButton reservarButton;
-    private JButton cancelarReservaButton;
+    private JButton cancelarButton;
     private JButton salirButton;
 
     public static void main(String[] args) {
@@ -54,7 +55,11 @@ public class tablaCanchaTenis extends JFrame {
         setBounds(100, 100, 909, 452);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setBackground(Color.BLACK);
         setContentPane(contentPane);
+        contentPane.setLayout(null);
+        
+        Font buttonFont = new Font("Mandalore", Font.PLAIN, 20);
         
         controlador = new CanchaTenisControlador();
 
@@ -65,14 +70,20 @@ public class tablaCanchaTenis extends JFrame {
         contentPane.setLayout(null);
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(5, 19, 900, 190);
+        scrollPane.setBounds(5, 30, 900, 190);
+        contentPane.setFont(buttonFont);
         contentPane.add(scrollPane);
 
         elemento = new JLabel("Seleccionado:");
-        elemento.setBounds(5, 5, 900, 14);
+        elemento.setBounds(5, 5, 900, 18);
+        elemento.setFont(buttonFont);
+        elemento.setForeground(Color.RED);
         contentPane.add(elemento);
 
         reservarButton = new JButton("Reservar Cancha");
+        reservarButton.setFont(buttonFont);
+        reservarButton.setBackground(Color.RED);
+        reservarButton.setForeground(Color.BLACK);
         reservarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
@@ -90,8 +101,11 @@ public class tablaCanchaTenis extends JFrame {
         reservarButton.setBounds(236, 241, 187, 58);
         contentPane.add(reservarButton);
 
-        cancelarReservaButton = new JButton("Cancelar Reserva");
-        cancelarReservaButton.addActionListener(new ActionListener() {
+        cancelarButton = new JButton("Cancelar Reserva");
+        cancelarButton.setFont(buttonFont);
+        cancelarButton.setBackground(Color.RED);
+        cancelarButton.setForeground(Color.BLACK);
+        cancelarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
@@ -103,12 +117,16 @@ public class tablaCanchaTenis extends JFrame {
                 }
             }
         });
-        cancelarReservaButton.setBounds(463, 241, 187, 58);
-        contentPane.add(cancelarReservaButton);
+        cancelarButton.setBounds(463, 241, 200, 58);
+        contentPane.add(cancelarButton);
 
         salirButton = new JButton("Salir");
+        salirButton.setFont(buttonFont);
+        salirButton.setBackground(Color.RED);
+        salirButton.setForeground(Color.BLACK);
         salirButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	new tablaSelectorCanchas().setVisible(true);
                 dispose();
             }
         });
@@ -128,7 +146,8 @@ public class tablaCanchaTenis extends JFrame {
                         String piso = (String) table.getValueAt(selectedRow, 1);
                         double precio = (double) table.getValueAt(selectedRow, 2);
                         boolean disponible = (boolean) table.getValueAt(selectedRow, 3);
-                        elemento.setText("Seleccionado: ID=" + id + ", Piso=" + piso);
+                        elemento.setForeground(Color.RED);
+                        elemento.setText("Seleccionado: ID=" + id + ", Piso=" + piso + ", Precio: " + precio + ", Disponible: " + disponible);
                     }
                 }
             }

@@ -13,44 +13,48 @@ public class Pileta {
     }
 
     public void ingresarPersonas() {
-        int personas;
-        try {
-            personas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de personas a ingresar a la pileta:"));
-            if (personas <= 0) {
-                JOptionPane.showMessageDialog(null, "La cantidad de personas a ingresar debe ser mayor que 0.");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Ingrese un número válido para la cantidad de personas.");
-            return;
-        }
-
-        if (cantidadPersonas + personas <= capacidadMaxima) {
-            cantidadPersonas += personas;
-            JOptionPane.showMessageDialog(null, "Se han ingresado " + personas + " personas a la pileta.\nTotal: " + cantidadPersonas);
-        } else {
-            JOptionPane.showMessageDialog(null, "No se pueden ingresar más personas, la pileta está llena.");
-        }
+        if (cantidadPersonas < capacidadMaxima) {
+	        int personas;
+	        boolean ingresoValido = false;
+	        do {
+	            try {
+	                personas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de personas a ingresar a la pileta:"));
+	                if (personas <= 0) {
+	                    JOptionPane.showMessageDialog(null, "La cantidad de personas a ingresar debe ser mayor que 0.");
+	                } else if (cantidadPersonas + personas > capacidadMaxima) {
+	                    JOptionPane.showMessageDialog(null, "Esa cantidad de personas sobrepasan el límite de la pileta (50).");
+	                } else {
+	                    ingresoValido = true;
+	                    cantidadPersonas += personas;
+	                    JOptionPane.showMessageDialog(null, "Se han ingresado " + personas + " personas a la pileta.\nTotal: " + cantidadPersonas);
+	                }
+	            } catch (NumberFormatException e) {
+	                JOptionPane.showMessageDialog(null, "Ingrese un número válido para la cantidad de personas.");
+	            }
+	        } while (!ingresoValido);
+	    } else {
+	        JOptionPane.showMessageDialog(null, "Capacidad máxima alcanzada, no se pueden ingresar personas.");
+	    }
     }
-
+    
     public void retirarPersonas() {
         if (cantidadPersonas > 0) {
             int personas;
-            boolean ingresoValido = false; // Bandera para verificar si la entrada es válida
+            boolean ingresoValido = false;
             do {
                 try {
                     personas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de personas a retirar de la pileta:"));
                     if (personas <= 0 || personas > cantidadPersonas) {
                         JOptionPane.showMessageDialog(null, "La cantidad de personas a retirar debe ser mayor que 0 y menor o igual al número actual de personas en la pileta.");
                     } else {
-                        ingresoValido = true; // Marcar como válida la entrada
+                        ingresoValido = true;
                         cantidadPersonas -= personas;
                         JOptionPane.showMessageDialog(null, "Se han retirado " + personas + " personas de la pileta.\nTotal: " + cantidadPersonas);
                     }
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Ingrese un número válido para la cantidad de personas.");
                 }
-            } while (!ingresoValido); // Continuar mientras no se haya ingresado un valor válido
+            } while (!ingresoValido);
         } else {
             JOptionPane.showMessageDialog(null, "No hay personas en la pileta para retirar.");
         }

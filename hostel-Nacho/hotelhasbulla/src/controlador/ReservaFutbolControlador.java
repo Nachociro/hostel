@@ -26,17 +26,11 @@ public class ReservaFutbolControlador {
              ResultSet resultSet = statement.executeQuery()) {
              
             while (resultSet.next()) {
-                // Este bloque es para convertir los IDs de huesped y futbol en listas de objetos
                 LinkedList<Habitacion> huespedes = obtenerHuespedes(resultSet.getInt("id_ReservaFutbol"));
                 LinkedList<CanchaFutbol> canchas = obtenerCanchas(resultSet.getInt("id_ReservaFutbol"));
 
                 ReservaFutbol reserva = new ReservaFutbol(
-                        resultSet.getInt("id_ReservaFutbol"),
-                        huespedes,
-                        canchas,
-                        resultSet.getTime("horaInicio"),
-                        resultSet.getTime("horaFin"),
-                        resultSet.getDate("fecha")
+                        resultSet.getInt("id_ReservaFutbol"), huespedes, canchas, resultSet.getTime("horaInicio"), resultSet.getTime("horaFin"), resultSet.getDate("fecha")
                 );
                 reservas.add(reserva);
             }
@@ -128,20 +122,16 @@ public class ReservaFutbolControlador {
     }
 
     private LinkedList<Habitacion> obtenerHuespedes(int reservaId) {
-        // Implementar la lógica para obtener la lista de huespedes asociados a la reserva
         return new LinkedList<>();
     }
 
     private LinkedList<CanchaFutbol> obtenerCanchas(int reservaId) {
-        // Implementar la lógica para obtener la lista de canchas asociadas a la reserva
         return new LinkedList<>();
     }
 
     private void agregarHuespedesYcanchas(int reservaId, LinkedList<Habitacion> huespedes, LinkedList<CanchaFutbol> canchas) {
-        // Implementar la lógica para agregar huespedes y canchas a la reserva
     }
 
     private void actualizarHuespedesYcanchas(int reservaId, LinkedList<Habitacion> huespedes, LinkedList<CanchaFutbol> canchas) {
-        // Implementar la lógica para actualizar huespedes y canchas de la reserva
     }
 }

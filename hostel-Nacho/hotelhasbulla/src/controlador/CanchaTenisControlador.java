@@ -95,7 +95,7 @@ public class CanchaTenisControlador {
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        	JOptionPane.showMessageDialog(null, "Reserva cancelada con éxito");
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
