@@ -1,24 +1,17 @@
 package usuario;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import javax.swing.JOptionPane;
 
 import controlador.LimpiezaControlador;
 import vista.tablaHabitaciones;
 
 public class Limpieza {
 
-    int idLimpieza;
-    int numeroHabitacion;
-    LocalDate fecha;
-    String hora;
+    private int idLimpieza;
+    private int numeroHabitacion;
+    private LocalDate fecha;
+    private String hora;
 
     public Limpieza(int idLimpieza, int numeroHabitacion, LocalDate fecha, String hora) {
         this.idLimpieza = idLimpieza;
@@ -63,37 +56,40 @@ public class Limpieza {
                 duracionDefinitiva = 30;
                 break;
             default:
-                JOptionPane.showMessageDialog(null, "Tipo de habitación desconocido");
-                return;
+                throw new IllegalArgumentException("Tipo de habitación desconocido");
         }
 
         if (tipoLimpieza().equals("Limpieza de Rutina")) {
-            JOptionPane.showMessageDialog(null, "La limpieza durará " + duracionRutina + " minutos");
+            System.out.println("La limpieza durará " + duracionRutina + " minutos");
         } else {
-            JOptionPane.showMessageDialog(null, "La limpieza durará " + duracionDefinitiva + " minutos");
+            System.out.println("La limpieza durará " + duracionDefinitiva + " minutos");
         }
     }
-    
-    private String tipoHabitacion() {
-       
-        tablaHabitaciones tablaHab = new tablaHabitaciones();
-        String tipo = tablaHab.obtenerTipoHabitacionSeleccionada();
-        
-        if (tipo == null) {
-        
-            JOptionPane.showMessageDialog(null, "Ninguna habitación seleccionada");
+
+    public void realizarLimpieza() {
+        if (validarFechaYHora()) {
+            LimpiezaControlador controlador = new LimpiezaControlador();
+            controlador.addLimpieza(this);
+            System.out.println("Limpieza realizada y registrada en la base de datos");
+        } else {
+            System.out.println("No se puede realizar la limpieza en la fecha y hora especificadas");
         }
-        
+    }
+
+    private String tipoHabitacion() {
+        tablaHabitaciones tablaHab = new tablaHabitaciones(null);
+        String tipo = tablaHab.obtenerTipoHabitacionSeleccionada();
+
+        if (tipo == null) {
+            throw new IllegalArgumentException("Ninguna habitación seleccionada");
+        }
+
         return tipo;
     }
 
     private boolean habitacionTieneLimpiezaActiva() {
-        boolean tieneLimpiezaActiva = false;
         LimpiezaControlador controlador = new LimpiezaControlador();
-
-        tieneLimpiezaActiva = controlador.tieneLimpiezaActivaEnHabitacion(numeroHabitacion);
-
-        return tieneLimpiezaActiva;
+        return controlador.tieneLimpiezaActivaEnHabitacion(numeroHabitacion);
     }
 
     public int getIdLimpieza() {

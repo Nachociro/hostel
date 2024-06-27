@@ -126,6 +126,7 @@ public class pantallaInicio extends JFrame {
                 mostrarMensajeCredencialesIncorrectas();
         }
     }
+   
 
     private void mostrarMensajeCredencialesIncorrectas() {
         JOptionPane.showMessageDialog(this, "Credenciales incorrectas. Intente de nuevo.");

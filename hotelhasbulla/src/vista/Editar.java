@@ -1,3 +1,5 @@
+
+
 package vista;
 
 import usuario.Limpieza;
@@ -11,14 +13,14 @@ import java.time.LocalDate;
 
 public class Editar extends JFrame {
 
-    private testEma.LimpiezaHabitacion limpieza;
+    private Limpieza limpieza;
     private LimpiezaControlador controlador;
     private JTextField txtNumeroHabitacion;
     private JTextField txtFecha;
     private JTextField txtHora;
 
-    public Editar(testEma.LimpiezaHabitacion limpieza, LimpiezaControlador controlador) {
-        this.limpieza = limpieza;
+    public Editar(Limpieza limpiezaSeleccionada, LimpiezaControlador controlador) {
+        this.limpieza = limpiezaSeleccionada;
         this.controlador = controlador;
 
         setTitle("Editar Limpieza");
@@ -27,24 +29,24 @@ public class Editar extends JFrame {
         getContentPane().setLayout(new GridLayout(5, 2, 5, 5));
 
         getContentPane().add(new JLabel("Número de Habitación:"));
-        txtNumeroHabitacion = new JTextField(String.valueOf(limpieza.getNumeroHabitacion()));
+        txtNumeroHabitacion = new JTextField(String.valueOf(limpiezaSeleccionada.getNumeroHabitacion()));
         getContentPane().add(txtNumeroHabitacion);
 
         getContentPane().add(new JLabel("Fecha (YYYY-MM-DD):"));
-        txtFecha = new JTextField(limpieza.getFecha().toString());
+        txtFecha = new JTextField(limpiezaSeleccionada.getFecha().toString());
         getContentPane().add(txtFecha);
 
         getContentPane().add(new JLabel("Hora (HH:MM):"));
-        txtHora = new JTextField(limpieza.getHora());
+        txtHora = new JTextField(limpiezaSeleccionada.getHora());
         getContentPane().add(txtHora);
 
         JButton btnGuardar = new JButton("Guardar");
         btnGuardar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                limpieza.setNumeroHabitacion(Integer.parseInt(txtNumeroHabitacion.getText()));
-                limpieza.setFecha(LocalDate.parse(txtFecha.getText()));
-                limpieza.setHora(txtHora.getText());
-                controlador.updateLimpieza(limpieza);
+                limpiezaSeleccionada.setNumeroHabitacion(Integer.parseInt(txtNumeroHabitacion.getText()));
+                limpiezaSeleccionada.setFecha(LocalDate.parse(txtFecha.getText()));
+                limpiezaSeleccionada.setHora(txtHora.getText());
+                controlador.updateLimpieza(limpiezaSeleccionada);
                 JOptionPane.showMessageDialog(null, "Limpieza actualizada");
                 dispose();
             }

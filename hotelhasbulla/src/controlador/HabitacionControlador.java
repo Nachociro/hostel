@@ -15,7 +15,7 @@ public class HabitacionControlador implements HabitacionRepository {
     public HabitacionControlador() {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
-
+    
     @Override
     public void addHabitacion(Habitacion habitacion) {
         try {
@@ -121,6 +121,29 @@ public class HabitacionControlador implements HabitacionRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Habitacion> getHabitacionesNoLimpias() {
+        List<Habitacion> habitacionesNoLimpias = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM habitacion WHERE limpieza = FALSE");
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Habitacion habitacion = new Habitacion(
+                    resultSet.getInt("numero_habitacion"),
+                    resultSet.getString("tipo"),
+                    resultSet.getString("descripcion"),
+                    resultSet.getDouble("precio"),
+                    resultSet.getBoolean("disponibilidad"),
+                    resultSet.getBoolean("limpieza")
+                );
+                habitacionesNoLimpias.add(habitacion);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return habitacionesNoLimpias;
     }
 
     public List<Habitacion> getHabitacionesDisponibles() {

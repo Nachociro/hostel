@@ -1,29 +1,28 @@
 package vista;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import controlador.HabitacionControlador;
 import controlador.LimpiezaControlador;
+import modelo.Habitacion;
 import usuario.Limpieza;
-
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JMenuBar;
 
 public class tablaLimpieza extends JFrame {
 
@@ -31,10 +30,14 @@ public class tablaLimpieza extends JFrame {
     private JPanel contentPane;
     private JTable table;
     private DefaultTableModel model;
-    private LimpiezaControlador controlador; 
+    private LimpiezaControlador limpiezaControlador;
+    private HabitacionControlador habitacionControlador; 
     private JLabel elemento;
     private Limpieza limpiezaSeleccionada;
     private JButton btnEditar;
+    private JButton btnVerHistorial;
+    private JButton btnVerHabitacionesSucias;
+    private JButton btnRealizarLimpieza;
 
     /**
      * Launch the application.
@@ -65,23 +68,20 @@ public class tablaLimpieza extends JFrame {
 
         setContentPane(contentPane);
 
-        // Inicializar controlador y limpieza seleccionada
-        controlador = new LimpiezaControlador();
+        limpiezaControlador = new LimpiezaControlador();
+        habitacionControlador = new HabitacionControlador();
         limpiezaSeleccionada = new Limpieza(0, 0, LocalDate.now(), "00:00");
 
-        // Crear la tabla y el modelo
         String[] columnNames = {"ID Limpieza", "Número Habitación", "Fecha", "Hora"};
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         actualizarTabla();
         contentPane.setLayout(null);
 
-        // Crear el JScrollPane y agregar la tabla
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(5, 19, 911, 190);
         contentPane.add(scrollPane);
 
-        // Crear el JLabel para mostrar la selección
         elemento = new JLabel("Seleccionado:");
         elemento.setBounds(5, 5, 911, 14);
         contentPane.add(elemento);
@@ -104,11 +104,41 @@ public class tablaLimpieza extends JFrame {
         btnEditar.setBounds(367, 280, 166, 58);
         contentPane.add(btnEditar);
 
-        // Configurar el modelo de selección
+        btnVerHistorial = new JButton("Ver Historial de Limpiezas");
+        btnVerHistorial.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                actualizarTabla();
+            }
+        });
+        btnVerHistorial.setBounds(53, 350, 187, 58);
+        contentPane.add(btnVerHistorial);
+
+        btnVerHabitacionesSucias = new JButton("Ver Habitaciones Sucias");
+        btnVerHabitacionesSucias.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                verHabitacionesSucias();
+            }
+        });
+        btnVerHabitacionesSucias.setBounds(367, 350, 166, 58);
+        contentPane.add(btnVerHabitacionesSucias);
+        
+        btnRealizarLimpieza = new JButton("Realizar Limpieza");
+        btnRealizarLimpieza.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (limpiezaSeleccionada != null) {
+                    limpiezaSeleccionada.realizarLimpieza();
+                    actualizarTabla();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Seleccione una limpieza para realizar");
+                }
+            }
+        });
+        btnRealizarLimpieza.setBounds(53, 420, 187, 58);
+        contentPane.add(btnRealizarLimpieza);
+
         ListSelectionModel selectionModel = table.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // Agregar un escuchador de selección
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -120,13 +150,10 @@ public class tablaLimpieza extends JFrame {
     }
 
     private void actualizarTabla() {
-        // Limpiar el modelo de la tabla
         model.setRowCount(0);
 
-        // Obtener la lista actualizada de limpiezas
-        List<Limpieza> limpiezas = controlador.getAllLimpiezas();
+        List<Limpieza> limpiezas = limpiezaControlador.getAllLimpiezas();
 
-        // Agregar los datos al modelo
         for (Limpieza limpieza : limpiezas) {
             model.addRow(new Object[]{
                 limpieza.getIdLimpieza(),
@@ -135,6 +162,30 @@ public class tablaLimpieza extends JFrame {
                 limpieza.getHora()
             });
         }
+
+        System.out.println("Datos cargados: " + limpiezas.size());
+    }
+
+    private void verHabitacionesSucias() {
+        model.setRowCount(0);
+
+        String[] columnNames = {"Número Habitación", "Tipo", "Descripción", "Precio", "Disponibilidad", "Limpieza"};
+        model.setColumnIdentifiers(columnNames);
+
+        List<Habitacion> habitacionesSucias = habitacionControlador.getHabitacionesNoLimpias();
+
+        for (Habitacion habitacion : habitacionesSucias) {
+            model.addRow(new Object[]{
+                habitacion.getNumero_habitacion(),
+                habitacion.getTipo(),
+                habitacion.getDescripcion(),
+                habitacion.getPrecio(),
+                habitacion.isDisponibilidad() ? "Disponible" : "Ocupado",
+                habitacion.isLimpieza() ? "Limpia" : "Sucia"
+            });
+        }
+
+        System.out.println("Habitaciones sucias cargadas: " + habitacionesSucias.size());
     }
 
     private void actualizarSeleccion() {
@@ -154,7 +205,7 @@ public class tablaLimpieza extends JFrame {
 
     private void eliminarLimpieza() {
         if (limpiezaSeleccionada.getIdLimpieza() != 0) {
-            controlador.deleteLimpieza(limpiezaSeleccionada.getIdLimpieza());
+            limpiezaControlador.deleteLimpieza(limpiezaSeleccionada.getIdLimpieza());
             JOptionPane.showMessageDialog(null, "Limpieza eliminada correctamente");
             actualizarTabla();
         } else {
@@ -164,7 +215,7 @@ public class tablaLimpieza extends JFrame {
 
     private void abrirEditar() {
         if (limpiezaSeleccionada.getIdLimpieza() != 0) {
-            Editar editar = new Editar(limpiezaSeleccionada, controlador);
+            Editar editar = new Editar(limpiezaSeleccionada, limpiezaControlador);
             editar.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione una limpieza para editar");

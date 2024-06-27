@@ -36,7 +36,9 @@ public class Main {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    frameActual.dispose(); 
+                    frameActual.dispose();
+                    tablaLimpieza frame = new tablaLimpieza();
+                    frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

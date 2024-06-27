@@ -88,4 +88,9 @@ public class tablaHabitaciones extends JFrame {
             });
         }
     }
+
+	public String obtenerTipoHabitacionSeleccionada() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
