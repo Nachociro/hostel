@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -34,24 +34,22 @@ public class tablaSelectorCanchas extends JFrame {
         setBounds(100, 100, 450, 400);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setBackground(Color.BLACK); // Fondo negro
+        contentPane.setBackground(Color.BLACK);
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        // Fuente para los botones
         Font buttonFont = new Font("Mandalore", Font.PLAIN, 20);
 
-        // Crear y agregar botones con los mismos estilos
         JButton futbolButton = new JButton("Fútbol");
         futbolButton.setBounds(50, 50, 300, 40);
         futbolButton.setFont(buttonFont);
-        futbolButton.setBackground(Color.RED); // Fondo rojo
-        futbolButton.setForeground(Color.BLACK); // Texto negro
+        futbolButton.setBackground(Color.RED);
+        futbolButton.setForeground(Color.BLACK);
         contentPane.add(futbolButton);
         futbolButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new tablaCanchaFutbol().setVisible(true);
-                dispose(); // Cerrar la ventana actual
+                dispose();
             }
         });
 
@@ -64,7 +62,7 @@ public class tablaSelectorCanchas extends JFrame {
         tenisButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new tablaCanchaTenis().setVisible(true);
-                dispose(); // Cerrar la ventana actual
+                dispose();
             }
         });
 
@@ -76,8 +74,7 @@ public class tablaSelectorCanchas extends JFrame {
         contentPane.add(salirButton);
         salirButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Saliendo de la gestión de canchas.");
-                dispose(); // Cerrar la ventana actual
+                dispose();
             }
         });
     }

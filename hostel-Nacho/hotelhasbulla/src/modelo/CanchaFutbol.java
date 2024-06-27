@@ -1,7 +1,7 @@
-
 package modelo;
 
 import javax.swing.JOptionPane;
+import controlador.CanchaFutbolControlador;
 
 public class CanchaFutbol {
     private int id_futbol;
@@ -66,6 +66,7 @@ public class CanchaFutbol {
     }
 
     public static void reservarCancha(CanchaFutbol[] canchas) {
+        CanchaFutbolControlador controlador = new CanchaFutbolControlador();
         String canchaNum = JOptionPane.showInputDialog("Ingrese el número de la cancha a reservar:");
         int num = Integer.parseInt(canchaNum);
         String numPersonasStr = JOptionPane.showInputDialog("Ingrese el número de personas que jugarán:");
@@ -74,7 +75,12 @@ public class CanchaFutbol {
 
         for (CanchaFutbol cancha : canchas) {
             if (cancha.getId_futbol() == num) {
-                cancha.reservarCancha(numPersonas);
+                if (controlador.estaCanchaDisponible(cancha.getId_futbol())) {
+                    cancha.reservarCancha(numPersonas);
+                    controlador.reservarCancha(cancha.getId_futbol(), numPersonas);
+                } else {
+                    JOptionPane.showMessageDialog(null, "La cancha ya está reservada. No se puede realizar la reserva.");
+                }
                 canchaEncontrada = true;
                 break;
             }
@@ -94,13 +100,19 @@ public class CanchaFutbol {
     }
    
     public static void cancelarReserva(CanchaFutbol[] canchas) {
+        CanchaFutbolControlador controlador = new CanchaFutbolControlador();
         String canchaNum = JOptionPane.showInputDialog("Ingrese el número de la cancha a cancelar la reserva:");
         int num = Integer.parseInt(canchaNum);
         boolean canchaEncontrada = false;
 
         for (CanchaFutbol cancha : canchas) {
             if (cancha.getId_futbol() == num) {
-                cancha.cancelarReserva();
+                if (!controlador.estaCanchaDisponible(cancha.getId_futbol())) {
+                    cancha.cancelarReserva();
+                    controlador.cancelarReserva(cancha.getId_futbol());
+                } else {
+                    JOptionPane.showMessageDialog(null, "La cancha no está reservada. No se puede cancelar la reserva.");
+                }
                 canchaEncontrada = true;
                 break;
             }
