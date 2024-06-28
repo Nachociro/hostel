@@ -1,6 +1,8 @@
 package vista;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JMenuBar;
 
 public class tablaCanchaFutbol extends JFrame {
 
@@ -53,29 +54,35 @@ public class tablaCanchaFutbol extends JFrame {
         setBounds(100, 100, 909, 452);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setBackground(Color.BLACK);
         setContentPane(contentPane);
+        contentPane.setLayout(null);
+        
+        Font buttonFont = new Font("Mandalore", Font.PLAIN, 20);
 
-        // Inicializar controlador
         controlador = new CanchaFutbolControlador();
 
-        // Crear la tabla y el modelo
         String[] columnNames = {"ID", "Tamaño", "Precio", "Disponible"};
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         actualizarTabla();
         contentPane.setLayout(null);
 
-        // Crear el JScrollPane y agregar la tabla
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(5, 19, 900, 190);
+        scrollPane.setBounds(5, 30, 900, 190);
+        contentPane.setFont(buttonFont);
         contentPane.add(scrollPane);
 
-        // Crear el JLabel para mostrar la selección
         elemento = new JLabel("Seleccionado:");
-        elemento.setBounds(5, 5, 900, 14);
+        elemento.setBounds(5, 5, 900, 18);
+        elemento.setFont(buttonFont);
+        elemento.setForeground(Color.RED);
         contentPane.add(elemento);
 
         reservarButton = new JButton("Reservar Cancha");
+        reservarButton.setFont(buttonFont);
+        reservarButton.setBackground(Color.RED);
+        reservarButton.setForeground(Color.BLACK);
         reservarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
@@ -85,7 +92,6 @@ public class tablaCanchaFutbol extends JFrame {
                     int numPersonas = Integer.parseInt(numPersonasStr);
                     controlador.reservarCancha(id, numPersonas);
                     actualizarTabla();
-                    JOptionPane.showMessageDialog(null, "Cancha reservada con éxito");
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
                 }
@@ -95,6 +101,9 @@ public class tablaCanchaFutbol extends JFrame {
         contentPane.add(reservarButton);
 
         cancelarButton = new JButton("Cancelar Reserva");
+        cancelarButton.setFont(buttonFont);
+        cancelarButton.setBackground(Color.RED);
+        cancelarButton.setForeground(Color.BLACK);
         cancelarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
@@ -102,20 +111,21 @@ public class tablaCanchaFutbol extends JFrame {
                     int id = (int) table.getValueAt(selectedRow, 0);
                     controlador.cancelarReserva(id);
                     actualizarTabla();
-                    JOptionPane.showMessageDialog(null, "Reserva cancelada con éxito");
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una cancha.");
                 }
             }
         });
-        cancelarButton.setBounds(482, 248, 187, 58);
+        cancelarButton.setBounds(482, 248, 200, 58);
         contentPane.add(cancelarButton);
 
-        // Agregar el botón de "Salir"
         salirButton = new JButton("Salir");
+        salirButton.setFont(buttonFont);
+        salirButton.setBackground(Color.RED);
+        salirButton.setForeground(Color.BLACK);
         salirButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Cerrar la ventana actual
+            	new tablaSelectorCanchas().setVisible(true);
                 dispose();
             }
         });
@@ -123,11 +133,9 @@ public class tablaCanchaFutbol extends JFrame {
         contentPane.add(salirButton);
 
 
-        // Configurar el modelo de selección
         ListSelectionModel selectionModel = table.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // Agregar un escuchador de selección
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -138,7 +146,9 @@ public class tablaCanchaFutbol extends JFrame {
                         int tamaño = (int) table.getValueAt(selectedRow, 1);
                         double precio = (double) table.getValueAt(selectedRow, 2);
                         boolean disponible = (boolean) table.getValueAt(selectedRow, 3);
-                        elemento.setText("Seleccionado: ID=" + id + ", Tamaño=" + tamaño);
+                        elemento.setFont(buttonFont);
+                        elemento.setForeground(Color.RED);
+                        elemento.setText("Seleccionado: ID= " + id + ", Tamaño= " + tamaño + ", Precio: " + precio + ", Disponible: " + disponible);
                     }
                 }
             }
@@ -146,13 +156,10 @@ public class tablaCanchaFutbol extends JFrame {
     }
 
     private void actualizarTabla() {
-        // Limpiar el modelo de la tabla
         model.setRowCount(0);
 
-        // Obtener la lista actualizada de canchas de fútbol
         List<CanchaFutbol> canchas = controlador.getAllCanchas();
 
-        // Agregar los datos al modelo
         for (CanchaFutbol cancha : canchas) {
             model.addRow(
                 new Object[] {

@@ -8,14 +8,14 @@ import vista.tablaHabitaciones;
 
 public class Limpieza {
 
-    private int idLimpieza;
-    private int numeroHabitacion;
+    private int id_limpieza;
+    private int numero_habitacion;
     private LocalDate fecha;
     private String hora;
 
-    public Limpieza(int idLimpieza, int numeroHabitacion, LocalDate fecha, String hora) {
-        this.idLimpieza = idLimpieza;
-        this.numeroHabitacion = numeroHabitacion;
+    public Limpieza(int id_limpieza, int numero_habitacion, LocalDate fecha, String hora) {
+        this.id_limpieza = id_limpieza;
+        this.numero_habitacion = numero_habitacion;
         this.fecha = fecha;
         this.hora = hora;
     }
@@ -105,23 +105,23 @@ public class Limpieza {
 
     private boolean habitacionTieneLimpiezaActiva() {
         LimpiezaControlador controlador = new LimpiezaControlador();
-        return controlador.tieneLimpiezaActivaEnHabitacion(numeroHabitacion);
+        return controlador.tieneLimpiezaActivaEnHabitacion(numero_habitacion);
     }
 
-    public int getIdLimpieza() {
-        return idLimpieza;
+    public int getid_limpieza() {
+        return id_limpieza;
     }
 
-    public void setIdLimpieza(int idLimpieza) {
-        this.idLimpieza = idLimpieza;
+    public void setid_limpieza(int id_limpieza) {
+        this.id_limpieza = id_limpieza;
     }
 
-    public int getNumeroHabitacion() {
-        return numeroHabitacion;
+    public int getnumero_habitacion() {
+        return numero_habitacion;
     }
 
-    public void setNumeroHabitacion(int numeroHabitacion) {
-        this.numeroHabitacion = numeroHabitacion;
+    public void setnumero_habitacion(int numero_habitacion) {
+        this.numero_habitacion = numero_habitacion;
     }
 
     public LocalDate getFecha() {
