@@ -34,7 +34,7 @@ public class Limpieza {
         }
     }
 
-    public void duracionLimpieza() {
+    public int duracionLimpieza() {
         int duracionRutina = 0;
         int duracionDefinitiva = 0;
 
@@ -60,9 +60,9 @@ public class Limpieza {
         }
 
         if (tipoLimpieza().equals("Limpieza de Rutina")) {
-            System.out.println("La limpieza durará " + duracionRutina + " minutos");
+            return duracionRutina;
         } else {
-            System.out.println("La limpieza durará " + duracionDefinitiva + " minutos");
+            return duracionDefinitiva;
         }
     }
 
@@ -70,7 +70,23 @@ public class Limpieza {
         if (validarFechaYHora()) {
             LimpiezaControlador controlador = new LimpiezaControlador();
             controlador.addLimpieza(this);
+
+            // Registro del tiempo de inicio
+            LocalTime horaInicio = LocalTime.now();
+
+            try {
+                // Simulación del tiempo de limpieza
+                Thread.sleep(duracionLimpieza() * 60000); // convertir minutos a milisegundos
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Registro del tiempo de fin después de la simulación
+            LocalTime horaFin = LocalTime.now();
+
+            // Puedes registrar estos tiempos donde lo necesites, como en una base de datos o sistema de registros
             System.out.println("Limpieza realizada y registrada en la base de datos");
+            System.out.println("Hora de inicio: " + horaInicio + ", Hora de fin: " + horaFin);
         } else {
             System.out.println("No se puede realizar la limpieza en la fecha y hora especificadas");
         }
@@ -116,11 +132,13 @@ public class Limpieza {
         this.fecha = fecha;
     }
 
-    public String getHora() {
-        return hora;
-    }
+	public String getHora() {
+		return hora;
+	}
 
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
+	public void setHora(String hora) {
+		this.hora = hora;
+	}
+
+   
 }

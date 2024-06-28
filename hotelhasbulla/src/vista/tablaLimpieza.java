@@ -4,8 +4,8 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,7 +18,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-
 import controlador.HabitacionControlador;
 import controlador.LimpiezaControlador;
 import modelo.Habitacion;
@@ -31,7 +30,7 @@ public class tablaLimpieza extends JFrame {
     private JTable table;
     private DefaultTableModel model;
     private LimpiezaControlador limpiezaControlador;
-    private HabitacionControlador habitacionControlador; 
+    private HabitacionControlador habitacionControlador;
     private JLabel elemento;
     private Limpieza limpiezaSeleccionada;
     private JButton btnEditar;
@@ -67,16 +66,16 @@ public class tablaLimpieza extends JFrame {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         setContentPane(contentPane);
+        contentPane.setLayout(null);
 
         limpiezaControlador = new LimpiezaControlador();
         habitacionControlador = new HabitacionControlador();
         limpiezaSeleccionada = new Limpieza(0, 0, LocalDate.now(), "00:00");
 
-        String[] columnNames = {"ID Limpieza", "Número Habitación", "Fecha", "Hora"};
+        String[] columnNames = {"ID Limpieza", "Número Habitación", "Fecha y Hora"};
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         actualizarTabla();
-        contentPane.setLayout(null);
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(5, 19, 911, 190);
@@ -121,12 +120,19 @@ public class tablaLimpieza extends JFrame {
         });
         btnVerHabitacionesSucias.setBounds(367, 350, 166, 58);
         contentPane.add(btnVerHabitacionesSucias);
-        
+
         btnRealizarLimpieza = new JButton("Realizar Limpieza");
         btnRealizarLimpieza.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (limpiezaSeleccionada != null) {
+                    LocalDate inicio = LocalDate.now();
+                    LocalTime horaInicio = LocalTime.now();
                     limpiezaSeleccionada.realizarLimpieza();
+                    LocalDate fin = LocalDate.now();
+                    LocalTime horaFin = LocalTime.now();
+                    int minutosDuracion = java.time.Duration.between(horaInicio, horaFin).toMinutesPart();
+
+                    JOptionPane.showMessageDialog(null, "Limpieza realizada en " + minutosDuracion + " minutos");
                     actualizarTabla();
                 } else {
                     JOptionPane.showMessageDialog(null, "Seleccione una limpieza para realizar");
@@ -158,8 +164,7 @@ public class tablaLimpieza extends JFrame {
             model.addRow(new Object[]{
                 limpieza.getIdLimpieza(),
                 limpieza.getNumeroHabitacion(),
-                limpieza.getFecha(),
-                limpieza.getHora()
+                limpieza.getFecha() + " " + limpieza.getHora() // Combinar fecha y hora en una sola columna
             });
         }
 
@@ -169,19 +174,22 @@ public class tablaLimpieza extends JFrame {
     private void verHabitacionesSucias() {
         model.setRowCount(0);
 
-        String[] columnNames = {"Número Habitación", "Tipo", "Descripción", "Precio", "Disponibilidad", "Limpieza"};
+        String[] columnNames = {"Número Habitación", "Tipo", "Descripción", "Precio", "Disponibilidad", "Limpieza", "Tiempo de Limpieza"};
         model.setColumnIdentifiers(columnNames);
 
         List<Habitacion> habitacionesSucias = habitacionControlador.getHabitacionesNoLimpias();
 
         for (Habitacion habitacion : habitacionesSucias) {
+            Limpieza limpieza = new Limpieza(0, habitacion.getNumero_habitacion(), LocalDate.now(), "00:00");
+            int tiempoLimpieza = limpieza.duracionLimpieza();
             model.addRow(new Object[]{
                 habitacion.getNumero_habitacion(),
                 habitacion.getTipo(),
                 habitacion.getDescripcion(),
                 habitacion.getPrecio(),
                 habitacion.isDisponibilidad() ? "Disponible" : "Ocupado",
-                habitacion.isLimpieza() ? "Limpia" : "Sucia"
+                habitacion.isLimpieza() ? "Limpia" : "Sucia",
+                tiempoLimpieza + " mins"
             });
         }
 
@@ -193,9 +201,11 @@ public class tablaLimpieza extends JFrame {
         if (selectedRow != -1) {
             int idLimpieza = (int) table.getValueAt(selectedRow, 0);
             int numeroHabitacion = (int) table.getValueAt(selectedRow, 1);
-            LocalDate fecha = LocalDate.parse(table.getValueAt(selectedRow, 2).toString());
-            String hora = (String) table.getValueAt(selectedRow, 3);
-            elemento.setText("Seleccionado: ID Limpieza=" + idLimpieza + ", Número Habitación=" + numeroHabitacion + ", Fecha=" + fecha + ", Hora=" + hora);
+            String fechaHora = (String) table.getValueAt(selectedRow, 2);
+            String[] partes = fechaHora.split(" ");
+            LocalDate fecha = LocalDate.parse(partes[0]);
+            String hora = partes[1];
+            elemento.setText("Seleccionado: ID Limpieza=" + idLimpieza + ", Número Habitación=" + numeroHabitacion + ", Fecha y Hora=" + fechaHora);
             limpiezaSeleccionada.setIdLimpieza(idLimpieza);
             limpiezaSeleccionada.setNumeroHabitacion(numeroHabitacion);
             limpiezaSeleccionada.setFecha(fecha);
