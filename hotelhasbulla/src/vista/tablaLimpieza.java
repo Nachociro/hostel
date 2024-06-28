@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import controlador.HabitacionControlador;
 import controlador.LimpiezaControlador;
+import modelo.SingletonHabitaciones;
 import modelo.Habitacion;
 import usuario.Limpieza;
 
@@ -37,6 +38,7 @@ public class tablaLimpieza extends JFrame {
     private JButton btnVerHistorial;
     private JButton btnVerHabitacionesSucias;
     private JButton btnRealizarLimpieza;
+    private SingletonHabitaciones singleton;
 
     /**
      * Launch the application.
@@ -58,8 +60,6 @@ public class tablaLimpieza extends JFrame {
      * Create the frame.
      */
     public tablaLimpieza() {
-        this.setVisible(true);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 909, 452);
         contentPane = new JPanel();
@@ -71,6 +71,7 @@ public class tablaLimpieza extends JFrame {
         limpiezaControlador = new LimpiezaControlador();
         habitacionControlador = new HabitacionControlador();
         limpiezaSeleccionada = new Limpieza(0, 0, LocalDate.now(), "00:00");
+        singleton = SingletonHabitaciones.getInstance(); // Inicialización correcta del singleton
 
         String[] columnNames = {"ID Limpieza", "Número Habitación", "Fecha y Hora"};
         model = new DefaultTableModel(columnNames, 0);
@@ -172,7 +173,7 @@ public class tablaLimpieza extends JFrame {
     }
 
     private void verHabitacionesSucias() {
-        model.setRowCount(0);
+        model.setRowCount(0); // Limpiamos el modelo actual de la tabla
 
         String[] columnNames = {"Número Habitación", "Tipo", "Descripción", "Precio", "Disponibilidad", "Limpieza", "Tiempo de Limpieza"};
         model.setColumnIdentifiers(columnNames);
@@ -192,6 +193,9 @@ public class tablaLimpieza extends JFrame {
                 tiempoLimpieza + " mins"
             });
         }
+
+        // Actualizamos el texto informativo
+        elemento.setText("Habitaciones Sucias:");
 
         System.out.println("Habitaciones sucias cargadas: " + habitacionesSucias.size());
     }

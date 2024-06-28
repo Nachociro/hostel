@@ -26,7 +26,7 @@ public class SingletonHabitaciones {
     private Reserva reservaSeleccionada;
     private ClienteControlador clienteControlador; // Agregamos el controlador de clientes
 
-    private SingletonHabitaciones() {
+    public SingletonHabitaciones() {
         habitacionControlador = new HabitacionControlador();
         reservaControlador = new ReservaControlador();
         clienteControlador = new ClienteControlador(); // Inicializamos el controlador de clientes

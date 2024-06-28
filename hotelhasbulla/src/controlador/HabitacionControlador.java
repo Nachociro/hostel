@@ -140,6 +140,9 @@ public class HabitacionControlador implements HabitacionRepository {
                 );
                 habitacionesNoLimpias.add(habitacion);
             }
+            
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

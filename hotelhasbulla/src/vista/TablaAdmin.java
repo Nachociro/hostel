@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import controlador.ReservaControlador;
 import controlador.HabitacionControlador;
 import modelo.Reserva;
+import modelo.SingletonHabitaciones;
 import modelo.Habitacion;
 
 public class TablaAdmin extends JFrame {
@@ -98,7 +99,8 @@ public class TablaAdmin extends JFrame {
     }
 
     private void mostrarHabitaciones() {
-        tablaHabitaciones frame = new tablaHabitaciones(null);
+    	SingletonHabitaciones singleton = new SingletonHabitaciones();
+        tablaHabitaciones frame = new tablaHabitaciones(singleton);
         frame.setVisible(true);
         dispose(); // Cierra la ventana actual
     }

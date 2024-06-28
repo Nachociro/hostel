@@ -75,7 +75,18 @@ public class tablaHabitaciones extends JFrame {
             }
         });
         contentPane.add(btnConfirmar, BorderLayout.SOUTH);
+        
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); 
+                TablaAdmin tablaAdmin = new TablaAdmin(); 
+                tablaAdmin.setVisible(true); 
+            }
+        });
+        contentPane.add(btnVolver, BorderLayout.NORTH);
     }
+    
 
     private void cargarHabitaciones() {
         List<Habitacion> habitaciones = singleton.getHabitacionesDisponibles();

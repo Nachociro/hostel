@@ -116,7 +116,17 @@ public class TablaReservas extends JFrame {
             }
         });
         panel.add(btnBuscarPorDni);
-
+        
+        
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); 
+                TablaAdmin tablaAdmin = new TablaAdmin(); 
+                tablaAdmin.setVisible(true); 
+            }
+        });
+        panel.add(btnVolver);
         // Botón para confirmar la reserva
         btnConfirmarReserva = new JButton("Confirmar Reserva");
         btnConfirmarReserva.addActionListener(new ActionListener() {
