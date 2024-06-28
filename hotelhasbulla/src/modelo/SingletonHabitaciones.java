@@ -219,9 +219,9 @@ public class SingletonHabitaciones {
     private void realizarCheckOut(Reserva reserva, Habitacion habitacion) {
         Cliente cliente = clienteControlador.buscarClientePorDni(reserva.getDniHuesped());
 
-        if (cliente != null) {
-            String resena = JOptionPane.showInputDialog("Por favor, deja una reseña sobre tu estancia:");
-            cliente.setResena(resena);
+        
+           // String resena = JOptionPane.showInputDialog("Por favor, deja una reseña sobre tu estancia:");
+         //   cliente.setResena(resena);
          
             habitacion.setDisponibilidad(true);
             habitacionControlador.updateHabitacion(habitacion);
@@ -232,10 +232,8 @@ public class SingletonHabitaciones {
                     "Check-Out realizado con éxito para habitación número: " + habitacion.getNumero_habitacion());
             
             abrirPantallaInicio();
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al buscar al cliente por DNI.");
-        }
-    }
+        } 
+    
  
 
     public HabitacionControlador getHabitacionControlador() {
